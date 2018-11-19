@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-fake": "ng serve --configuration=fake",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

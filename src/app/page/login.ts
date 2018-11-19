@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {AppService} from '../service/app';
 
 @Component({
   selector: 'app-login-page-component',
@@ -7,5 +8,7 @@ import {Component} from '@angular/core';
   `
 })
 export class LoginPageComponent {
-
+  constructor(
+    private appService: AppService
+  ) {}
 }
