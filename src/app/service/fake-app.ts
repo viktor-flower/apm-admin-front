@@ -2,11 +2,17 @@ import {AppService, LOCAL_STORAGE_TOKEN_KEY, LoginHttpAnswer} from './app';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import * as _ from 'lodash';
 
 @Injectable()
 export class FakeAppService extends AppService {
-  public t_isAuthenticated = false;
-  public t_allowAuthenticate = false;
+  private t_users = [
+    {
+      login: 'admin',
+      password: 'passwd',
+      token: 'token-1234567'
+    }
+  ];
 
   constructor(
     httpClient: HttpClient
@@ -15,9 +21,9 @@ export class FakeAppService extends AppService {
   }
 
   protected loginHttp(login: string, password: string): Observable<LoginHttpAnswer> {
-    if (this.t_allowAuthenticate) {
-      this.t_isAuthenticated = true;
+    const user = _.find(this.t_users, (u) => u.login === login);
 
+    if (!!user && user.password === password) {
       return of({
         token: 'token-1234567'
       });

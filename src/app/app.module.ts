@@ -6,7 +6,7 @@ import {AppComponent} from './component/app/component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatCardModule, MatToolbarModule} from '@angular/material';
 import {DashboardPageComponent} from './page/dashboard';
-import {LoginPageComponent} from './page/login';
+import {LoginPageComponent} from './page/login/component';
 import { environment } from '../environments/environment';
 import {AppService} from './service/app';
 import {FakeAppService} from './service/fake-app';
