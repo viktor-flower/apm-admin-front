@@ -7,6 +7,8 @@ import {delay, mapTo} from 'rxjs/operators';
 
 @Injectable()
 export class FakeAppService extends AppService {
+  private t_delayPeriod = 2000;
+
   private t_users = [
     {
       login: 'admin',
@@ -21,21 +23,27 @@ export class FakeAppService extends AppService {
     super(httpClient);
   }
 
+  public t_setDelay(_delay: number) {
+    this.t_delayPeriod = _delay;
+  }
+
+  public t_delay<T>(o: Observable<T>): Observable<T> {
+    if (!!this.t_delayPeriod) {
+      return o.pipe(delay(this.t_delayPeriod));
+    }
+
+    return o;
+  }
+
   protected loginHttp(login: string, password: string): Observable<LoginHttpAnswer> {
     const user = _.find(this.t_users, (u) => u.login === login);
 
     if (!!user && user.password === password) {
-      return of(1).pipe(
-        delay(2000),
-        mapTo({
-          token: 'token-1234567'
-        })
-      );
+      return this.t_delay(of({
+        token: 'token-1234567'
+      }));
     }
 
-    return of(1).pipe(
-      delay(2000),
-      mapTo({})
-    );
+    return this.t_delay(of({}));
   }
 }

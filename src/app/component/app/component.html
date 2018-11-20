@@ -1,7 +1,30 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <h1>Welcome to {{ title }}!</h1>
-  </mat-toolbar-row>
-</mat-toolbar>
-
-<router-outlet></router-outlet>
+<mat-drawer-container hasBackdrop="true">
+  <mat-drawer #drawer mode="push">
+    I'm a drawer
+    <ng-container *ngIf="isAuthenticatedO | async">
+      <mat-list>
+        <mat-list-item (click)="logout()">
+          Logout
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+    <ng-container *ngIf="!(isAuthenticatedO | async)">
+      <mat-list>
+        <mat-list-item [routerLink]="['/login']">
+          Login
+        </mat-list-item>
+      </mat-list>
+    </ng-container>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="drawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1>Welcome to {{ title }}!</h1>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>

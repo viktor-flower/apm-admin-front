@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
 
@@ -11,19 +11,23 @@ export interface LoginHttpAnswer {
 
 @Injectable()
 export class AppService {
-  private authenticationS = new Subject<boolean>();
+  private authenticationS = new BehaviorSubject<boolean>(false);
   private authenticationO = this.authenticationS.asObservable();
   private token: string = null;
 
   constructor(
     private httpClient: HttpClient
   ) {
-    this.token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    if (!!token) {
+      this.setToken(token);
+    }
   }
 
   public setToken(token) {
     this.token = token;
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
+    console.log('emit', token);
     this.authenticationS.next(this.isAuthenticated());
   }
 

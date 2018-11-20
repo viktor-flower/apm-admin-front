@@ -1,13 +1,14 @@
 import {LoginPageComponent} from './component';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, flush, TestBed, tick} from '@angular/core/testing';
 import {AppService} from '../../service/app';
 import {FakeAppService} from '../../service/fake-app';
 import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {UiService} from '../../service/ui';
-import {MatSnackBarModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatSnackBarModule} from '@angular/material';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
-fdescribe('Page Login', () => {
+describe('Page Login', () => {
   let component: LoginPageComponent;
   let fixture: ComponentFixture<LoginPageComponent>;
   let service: AppService;
@@ -17,7 +18,12 @@ fdescribe('Page Login', () => {
       imports: [
         HttpClientModule,
         ReactiveFormsModule,
-        MatSnackBarModule
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSnackBarModule,
+        NoopAnimationsModule
       ],
       declarations: [ LoginPageComponent ],
       providers: [
@@ -47,22 +53,26 @@ fdescribe('Page Login', () => {
     expect(component).toBeDefined();
   });
 
-  it('Wrong credentials', () => {
+  it('Wrong credentials', fakeAsync(() => {
     component.form.patchValue({
       login: 'admin',
       password: 'passwdWrong'
     });
     component.save();
-    expect(service.isAuthenticated()).toBeTruthy();
-  });
+    tick(4000);
+    flush();
+    expect(service.isAuthenticated()).toBeFalsy();
+  }));
 
-  it('Right credentials', () => {
+  it('Right credentials', fakeAsync(() => {
     component.form.patchValue({
       login: 'admin',
       password: 'passwd'
     });
     component.save();
+    tick(4000);
+    flush();
     expect(service.isAuthenticated()).toBeTruthy();
-  });
+  }));
 
 });
