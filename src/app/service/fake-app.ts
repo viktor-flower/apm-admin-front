@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import * as _ from 'lodash';
+import {delay, mapTo} from 'rxjs/operators';
 
 @Injectable()
 export class FakeAppService extends AppService {
@@ -24,11 +25,17 @@ export class FakeAppService extends AppService {
     const user = _.find(this.t_users, (u) => u.login === login);
 
     if (!!user && user.password === password) {
-      return of({
-        token: 'token-1234567'
-      });
+      return of(1).pipe(
+        delay(2000),
+        mapTo({
+          token: 'token-1234567'
+        })
+      );
     }
 
-    return of({});
+    return of(1).pipe(
+      delay(2000),
+      mapTo({})
+    );
   }
 }

@@ -4,6 +4,8 @@ import {AppService} from '../../service/app';
 import {FakeAppService} from '../../service/fake-app';
 import {HttpClientModule} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
+import {UiService} from '../../service/ui';
+import {MatSnackBarModule} from '@angular/material';
 
 fdescribe('Page Login', () => {
   let component: LoginPageComponent;
@@ -12,9 +14,14 @@ fdescribe('Page Login', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientModule, ReactiveFormsModule ],
+      imports: [
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatSnackBarModule
+      ],
       declarations: [ LoginPageComponent ],
       providers: [
+        UiService,
         {
           provide: AppService,
           useClass: FakeAppService
@@ -36,8 +43,17 @@ fdescribe('Page Login', () => {
     service.clearAll();
   });
 
-  it('should create', () => {
+  it('Should create', () => {
     expect(component).toBeDefined();
+  });
+
+  it('Wrong credentials', () => {
+    component.form.patchValue({
+      login: 'admin',
+      password: 'passwdWrong'
+    });
+    component.save();
+    expect(service.isAuthenticated()).toBeTruthy();
   });
 
   it('Right credentials', () => {
@@ -47,7 +63,6 @@ fdescribe('Page Login', () => {
     });
     component.save();
     expect(service.isAuthenticated()).toBeTruthy();
-    console.log('isAuthenticated', service.isAuthenticated());
   });
 
 });

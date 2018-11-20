@@ -1,0 +1,18 @@
+<mat-card>
+  <mat-card-title>Authentication</mat-card-title>
+  <mat-card-content>
+    <div [formGroup]="form" class="controls-container">
+      <mat-form-field>
+        <input matInput type="text" placeholder="Login" formControlName="login">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Password" formControlName="password">
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="action-controls">
+      <button mat-raised-button color="primary" [disabled]="form.invalid || isProcessing" (click)="save()">Login</button>
+    </div>
+  </mat-card-actions>
+</mat-card>
