@@ -5,6 +5,7 @@ import {DashboardPageComponent} from './page/dashboard';
 import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {IsAnonymousGuard} from './guard/is-anonymous';
 import {StubComponentPage} from './page/stub';
+import {UserUpsertPageComponent} from './page/user/upsert';
 
 
 const routes: Routes = [
@@ -17,6 +18,11 @@ const routes: Routes = [
     path: 'login',
     component: LoginPageComponent,
     canActivate: [IsAnonymousGuard]
+  },
+  {
+    path: 'user/upsert',
+    component: UserUpsertPageComponent,
+    // canActivate: [IsAnonymousGuard]
   },
   {
     path: '**',

@@ -18,12 +18,15 @@ import {LoginPageComponent} from './page/login/component';
 import { environment } from '../environments/environment';
 import {AppService} from './service/app';
 import {FakeAppService} from './service/fake-app';
+import {FormlyMaterialModule} from '@ngx-formly/material';
+import {FormlyModule} from '@ngx-formly/core';
 import {HttpClientModule} from '@angular/common/http';
 import {UiService} from './service/ui';
 import {ReactiveFormsModule} from '@angular/forms';
 import {IsAnonymousGuard} from './guard/is-anonymous';
 import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {StubComponentPage} from './page/stub';
+import {UserUpsertPageComponent} from './page/user/upsert';
 
 export const matLibraries = [
   MatButtonModule,
@@ -44,6 +47,12 @@ export const allLibraries = [
   ReactiveFormsModule,
   HttpClientModule,
   AppRoutingModule,
+  FormlyModule.forRoot({
+    validationMessages: [
+      { name: 'required', message: 'This field is required' },
+    ]
+  }),
+  FormlyMaterialModule,
   ...matLibraries
 ];
 
@@ -51,7 +60,8 @@ export const allComponents = [
   AppComponent,
   LoginPageComponent,
   DashboardPageComponent,
-  StubComponentPage
+  StubComponentPage,
+  UserUpsertPageComponent
 ];
 
 export const allProviders: any[] = [
