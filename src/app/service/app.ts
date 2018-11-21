@@ -58,6 +58,7 @@ export class AppService {
   }
 
   public clearAll() {
+    this.setToken(null);
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
   }
 

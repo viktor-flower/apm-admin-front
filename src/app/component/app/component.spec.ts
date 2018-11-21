@@ -1,14 +1,25 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './component';
-import {MatToolbarModule} from '@angular/material';
+import {MatIconModule, MatListModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {AppService} from '../../service/app';
+import {HttpClientModule} from '@angular/common/http';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientModule,
         RouterTestingModule,
-        MatToolbarModule
+        MatToolbarModule,
+        MatSidenavModule,
+        MatListModule,
+        MatIconModule,
+        NoopAnimationsModule
+      ],
+      providers: [
+        AppService
       ],
       declarations: [
         AppComponent
@@ -22,16 +33,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'base-ng-app'`, () => {
+  it('Title in model', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('base-ng-app');
+    expect(app.title).toEqual('Application Policy Manager');
   });
 
-  it('should render title in a h1 tag', () => {
+  it('Title in view', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to base-ng-app!');
+    expect(compiled.querySelector('h1').textContent).toContain('Application Policy Manager!');
   });
 });
