@@ -1,6 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
+import {StudentService} from '../../service/student';
+import {Observable} from 'rxjs';
+import {createStudent, Student} from '../../state/student.model';
+import {StudentQuery} from '../../state/student.query';
+import {ID} from '@datorama/akita';
 
 @Component({
   selector: 'app-user-upsert-page-component',
@@ -21,10 +26,14 @@ import {FormlyFieldConfig} from '@ngx-formly/core';
     }
   `]
 })
-export class UserUpsertPageComponent {
-  constructor() {
+export class UserUpsertPageComponent implements OnInit {
+  formData: Student;
+  students$: Observable<Student[]>;
 
-  }
+  constructor(
+    //private studentService: StudentService,
+    private studentQuery: StudentQuery
+  ) {}
 
   form = new FormGroup({});
   model = { email: 'email@gmail.com' };
@@ -54,4 +63,26 @@ export class UserUpsertPageComponent {
   submit(model) {
     console.log(model);
   }
+
+  ngOnInit(): void {
+    //this.studentService.getStudents().subscribe();
+    //this.students$ = this.studentQuery.selectAll();
+  }
+
+  onAdd() {
+    this.formData = createStudent({});
+  }
+
+  onEdit(id: ID) {
+    this.formData = this.studentQuery.getEntity(id);
+  }
+
+  onDelete(id: ID) {
+    this.studentService.deleteStudent(id);
+  }
+
+  updateFormData(student: Student) {
+    this.studentService.updateStudent(student);
+  }
+
 }

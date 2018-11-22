@@ -27,6 +27,8 @@ import {IsAnonymousGuard} from './guard/is-anonymous';
 import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {StubComponentPage} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
+import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
+import {StudentStore} from './state/student.store';
 
 export const matLibraries = [
   MatButtonModule,
@@ -53,6 +55,7 @@ export const allLibraries = [
     ]
   }),
   FormlyMaterialModule,
+  environment.production ? [] : AkitaNgDevtools.forRoot(),
   ...matLibraries
 ];
 
