@@ -23,7 +23,13 @@ import {AppService} from '../../service/app';
       <ng-container matColumnDef="star" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon>more_vert</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/user', 'upsert', element.id]">Edit</button>
+          </mat-menu>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
         </td>
       </ng-container>
 

@@ -8,7 +8,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatFormFieldModule, MatIconModule,
-  MatInputModule, MatListModule,
+  MatInputModule, MatListModule, MatMenuModule,
   MatSidenavModule,
   MatSnackBarModule, MatTableModule,
   MatToolbarModule
@@ -43,6 +43,7 @@ export const matLibraries = [
   MatInputModule,
   MatFormFieldModule,
   MatListModule,
+  MatMenuModule,
   MatTableModule
 ];
 

@@ -43,6 +43,11 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard]
   },
   {
+    path: 'user/upsert/:id',
+    component: UserUpsertPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
     path: '**',
     component: StubComponentPage
   }

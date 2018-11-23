@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {StudentService} from '../../service/student';
-import {Observable} from 'rxjs';
+import {Observable, Subscriber} from 'rxjs';
 import {createStudent, Student} from '../../state/student.model';
 import {StudentQuery} from '../../state/student.query';
 import {ID} from '@datorama/akita';
 import {AppService} from '../../service/app';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-user-upsert-page-component',
@@ -32,13 +33,16 @@ import {AppService} from '../../service/app';
     }
   `]
 })
-export class UserUpsertPageComponent implements OnInit {
+export class UserUpsertPageComponent implements OnInit, OnDestroy {
   isProcessing = false;
   formData: Student;
   students$: Observable<Student[]>;
+  private sub: Subscriber;
+
 
   constructor(
-    private appService: AppService
+    private appService: AppService,
+    private activatedRoute: ActivatedRoute
     // private studentService: StudentService,
     // private studentQuery: StudentQuery
   ) {}
@@ -73,8 +77,17 @@ export class UserUpsertPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sub = this.activatedRoute.params.subscribe(params => {
+      let id = params['id']; // (+) converts string 'id' to a number
+
+      // In a real app: dispatch action to load the details here.
+    });
     //this.studentService.getStudents().subscribe();
     // this.students$ = this.studentQuery.selectAll();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   onAdd() {

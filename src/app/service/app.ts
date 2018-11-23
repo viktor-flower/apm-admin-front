@@ -89,6 +89,10 @@ export class AppService {
     });
   }
 
+  public getUserItemHttp(id: string): Observable<IUser> {
+    return of(null);
+  }
+
   public getUserIndexHttp(): Observable<IUser[]> {
     return of([]);
   }

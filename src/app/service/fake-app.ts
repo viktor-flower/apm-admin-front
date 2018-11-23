@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import * as _ from 'lodash';
 import * as faker from 'faker';
 import {delay, mapTo} from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Injectable()
 export class FakeAppService extends AppService {
@@ -117,6 +118,13 @@ export class FakeAppService extends AppService {
     }
 
     return this.t_delay(of({}));
+  }
+
+  public getUserItemHttp(id: string): Observable<IUser> {
+    _.find(this.t_storage.users, (u) => {
+      return u.id === id;
+    });
+    return of(null);
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
