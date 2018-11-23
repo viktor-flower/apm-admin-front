@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AppService} from '../../service/app';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {MatSidenav} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,8 @@ import {Router} from '@angular/router';
   styleUrls: ['./component.sass']
 })
 export class AppComponent {
+  @ViewChild('sidenav')
+  sidenav: MatSidenav;
   title = 'Application Policy Manager';
   public isAuthenticatedO: Observable<boolean>;
 
@@ -19,9 +22,16 @@ export class AppComponent {
     this.isAuthenticatedO = this.appService.getAuthenticationO();
   }
 
+  navigate(route) {
+    console.log(route);
+    this.router.navigate(route);
+    this.sidenav.close();
+  }
+
   logout() {
     this.appService.logout();
     this.router.navigate(['/login']);
+    this.sidenav.close();
   }
 
 }

@@ -4,9 +4,9 @@ import {Injectable} from '@angular/core';
 
 export interface StudentState extends  EntityState<Student> {}
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
 @StoreConfig({
   name: 'students'
 })

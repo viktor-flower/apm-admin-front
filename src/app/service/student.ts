@@ -1,15 +1,15 @@
 import {noop, ID} from '@datorama/akita';
 import {StudentStore} from '../state/student.store';
 import {StudentQuery} from '../state/student.query';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Student} from '../state/student.model';
 import {StudentDataService} from './student-data';
 import {tap} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
 export class StudentService {
   constructor(
     private studentDataService: StudentDataService,
@@ -22,7 +22,9 @@ export class StudentService {
       tap(s => this.studentStore.set(s))
     );
 
-    return this.studentQuery.isPristine ? request : noop();
+    return request;
+    // return this.studentQuery.isPristine ? request : noop();
+    //return this.studentQuery.isPristine ? request : of([]);
   }
 
   deleteStudent(id: ID) {

@@ -6,37 +6,45 @@ import {Observable} from 'rxjs';
 import {createStudent, Student} from '../../state/student.model';
 import {StudentQuery} from '../../state/student.query';
 import {ID} from '@datorama/akita';
+import {AppService} from '../../service/app';
 
 @Component({
   selector: 'app-user-upsert-page-component',
   template: `
     <form [formGroup]="form" (ngSubmit)="submit(model)">
       <formly-form [form]="form" [fields]="fields" [model]="model">
-        <button mat-raised-button color="primary" type="submit" class="btn btn-default">Submit</button>
+        <div class="action-controls">
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isProcessing">Submit</button>
+        </div>
       </formly-form>
     </form>
   `,
   styles: [`
     :host {
-      background: red;
-      padding: 23px;
+      margin: 23px;
       display: flex;
+      width: calc(100% - 46px);
+      height: calc(100% - 128px);
+    }
+
+    form {
       width: 100%;
-      height: calc(100% - 64px);
     }
   `]
 })
 export class UserUpsertPageComponent implements OnInit {
+  isProcessing = false;
   formData: Student;
   students$: Observable<Student[]>;
 
   constructor(
-    //private studentService: StudentService,
-    private studentQuery: StudentQuery
+    private appService: AppService
+    // private studentService: StudentService,
+    // private studentQuery: StudentQuery
   ) {}
 
   form = new FormGroup({});
-  model = { email: 'email@gmail.com' };
+  model = { email: '' };
   fields: FormlyFieldConfig[] = [
     {
       key: 'email',
@@ -66,7 +74,7 @@ export class UserUpsertPageComponent implements OnInit {
 
   ngOnInit(): void {
     //this.studentService.getStudents().subscribe();
-    //this.students$ = this.studentQuery.selectAll();
+    // this.students$ = this.studentQuery.selectAll();
   }
 
   onAdd() {
@@ -74,15 +82,15 @@ export class UserUpsertPageComponent implements OnInit {
   }
 
   onEdit(id: ID) {
-    this.formData = this.studentQuery.getEntity(id);
+    // this.formData = this.studentQuery.getEntity(id);
   }
 
   onDelete(id: ID) {
-    this.studentService.deleteStudent(id);
+    // this.studentService.deleteStudent(id);
   }
 
   updateFormData(student: Student) {
-    this.studentService.updateStudent(student);
+    // this.studentService.updateStudent(student);
   }
 
 }

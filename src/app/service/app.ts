@@ -9,6 +9,26 @@ export interface LoginHttpAnswer {
   token?: string;
 }
 
+export interface IUser {
+  id?: string;
+  name: string;
+  email: string;
+  roleIds: string[];
+}
+
+export interface IRole {
+  id?: string;
+  name: string;
+  description: string;
+  permissionIds: string[];
+}
+
+export interface IPermission {
+  id?: string;
+  name: string;
+  description: string;
+}
+
 @Injectable()
 export class AppService {
   private authenticationS = new BehaviorSubject<boolean>(false);
@@ -67,5 +87,17 @@ export class AppService {
       login,
       password
     });
+  }
+
+  public getUserIndexHttp(): Observable<IUser[]> {
+    return of([]);
+  }
+
+  public getRoleIndexHttp(): Observable<IRole[]> {
+    return of([]);
+  }
+
+  public getPermissionIndexHttp(): Observable<IPermission[]> {
+    return of([]);
   }
 }

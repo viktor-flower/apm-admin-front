@@ -7,9 +7,9 @@ import {Injectable} from '@angular/core';
 
 export interface IStudentGraphData { [key: string]: Array<string | number>; }
 
-@Injectable({
-  providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
 export class StudentQuery extends QueryEntity<StudentState, Student> {
 
   studentGraphData$ = this.selectAll().pipe(
@@ -20,12 +20,12 @@ export class StudentQuery extends QueryEntity<StudentState, Student> {
     return students.reduce<IStudentGraphData>(
       (
         {names: _names, quarterly: _quarterly, halfyearly: _halfyearly, annual: _annual}: IStudentGraphData,
-        {name, quarterly, halfyearly, annual}: Student): IStudentGraphData => {
+        {name, quarterlyScore, halfyearlyScore, annualScore}: Student): IStudentGraphData => {
         return {
           names: [..._names, name],
-          quaterly: [..._quarterly, quarterly],
-          halfyearly: [..._halfyearly, halfyearly],
-          annual: [..._annual, annual],
+          quaterly: [..._quarterly, quarterlyScore],
+          halfyearly: [..._halfyearly, halfyearlyScore],
+          annual: [..._annual, annualScore],
         };
       },
       {names: [], quarterly: [], halfyearly: [], annual: []}

@@ -1,30 +1,45 @@
-<mat-drawer-container hasBackdrop="true">
-  <mat-drawer #drawer mode="push">
-    I'm a drawer
+<mat-sidenav-container hasBackdrop="true">
+  <mat-sidenav #sidenav mode="push">
     <ng-container *ngIf="isAuthenticatedO | async">
       <mat-list>
-        <mat-list-item (click)="logout()">
-          Logout
+        <mat-list-item>
+          <button mat-button (click)="navigate(['/user', 'index'])">Users</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-button (click)="navigate(['/role', 'index'])">Roles</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-button (click)="navigate(['/permission', 'index'])">Permissions</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-button (click)="navigate([''])">List</button>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <button mat-button (click)="navigate([''])">Profile</button>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-button (click)="logout()">Logout</button>
         </mat-list-item>
       </mat-list>
     </ng-container>
     <ng-container *ngIf="!(isAuthenticatedO | async)">
       <mat-list>
-        <mat-list-item [routerLink]="['/login']">
-          Login
+        <mat-list-item>
+          <button mat-button (click)="navigate(['/login'])">Login</button>
         </mat-list-item>
       </mat-list>
     </ng-container>
-  </mat-drawer>
-  <mat-drawer-content>
+  </mat-sidenav>
+  <mat-sidenav-content>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button (click)="drawer.toggle()">
+        <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
         <h1>Welcome to {{ title }}!</h1>
       </mat-toolbar-row>
     </mat-toolbar>
     <router-outlet></router-outlet>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </mat-sidenav-content>
+</mat-sidenav-container>

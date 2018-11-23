@@ -10,7 +10,7 @@ import {
   MatFormFieldModule, MatIconModule,
   MatInputModule, MatListModule,
   MatSidenavModule,
-  MatSnackBarModule,
+  MatSnackBarModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {DashboardPageComponent} from './page/dashboard';
@@ -29,6 +29,9 @@ import {StubComponentPage} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {StudentStore} from './state/student.store';
+import {UserIndexPageComponent} from './page/user';
+import {PermissionIndexPageComponent} from './page/permission';
+import {RoleIndexPageComponent} from './page/role';
 
 export const matLibraries = [
   MatButtonModule,
@@ -39,7 +42,8 @@ export const matLibraries = [
   MatToolbarModule,
   MatInputModule,
   MatFormFieldModule,
-  MatListModule
+  MatListModule,
+  MatTableModule
 ];
 
 export const allLibraries = [
@@ -64,7 +68,10 @@ export const allComponents = [
   LoginPageComponent,
   DashboardPageComponent,
   StubComponentPage,
-  UserUpsertPageComponent
+  UserIndexPageComponent,
+  UserUpsertPageComponent,
+  PermissionIndexPageComponent,
+  RoleIndexPageComponent
 ];
 
 export const allProviders: any[] = [

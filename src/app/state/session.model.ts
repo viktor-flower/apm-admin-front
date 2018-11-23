@@ -1,5 +1,4 @@
 import {ID, Store, StoreConfig, transaction} from '@datorama/akita';
-import {createPizza} from './pizza.model';
 
 export interface User {
   firstName: string;
@@ -25,12 +24,6 @@ export function createSession(user: User) {
 export class SessionStore extends Store<SessionState> {
   constructor() {
     super(createInitialState());
-  }
-
-  @transaction()
-  addNewPizza() {
-    const  newPizza = createPizza();
-    this.add();
   }
 
   login(data: User) {

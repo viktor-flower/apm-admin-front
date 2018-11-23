@@ -6,6 +6,9 @@ import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {IsAnonymousGuard} from './guard/is-anonymous';
 import {StubComponentPage} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
+import {UserIndexPageComponent} from './page/user';
+import {PermissionIndexPageComponent} from './page/permission';
+import {RoleIndexPageComponent} from './page/role';
 
 
 const routes: Routes = [
@@ -20,9 +23,24 @@ const routes: Routes = [
     canActivate: [IsAnonymousGuard]
   },
   {
+    path: 'permission/index',
+    component: PermissionIndexPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
+    path: 'role/index',
+    component: RoleIndexPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
+    path: 'user/index',
+    component: UserIndexPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
     path: 'user/upsert',
     component: UserUpsertPageComponent,
-    // canActivate: [IsAnonymousGuard]
+    canActivate: [IsAuthenticatedGuard]
   },
   {
     path: '**',
