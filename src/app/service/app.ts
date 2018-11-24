@@ -93,6 +93,10 @@ export class AppService {
     return of(null);
   }
 
+  public updateUserItem(user: IUser): Observable<boolean> {
+    return of(true);
+  }
+
   public getUserIndexHttp(): Observable<IUser[]> {
     return of([]);
   }

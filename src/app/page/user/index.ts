@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
-import {AppService} from '../../service/app';
+import {AppService, IRole, IUser} from '../../service/app';
+import {flatMap} from 'tslint/lib/utils';
+import {map} from 'rxjs/operators';
+import {forkJoin, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-user-index-page-component',
@@ -14,9 +17,9 @@ import {AppService} from '../../service/app';
       </ng-container>
 
       <!-- EMail Column -->
-      <ng-container matColumnDef="email" sticky>
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      <ng-container matColumnDef="roles" sticky>
+        <th mat-header-cell *matHeaderCellDef>Roles</th>
+        <td mat-cell *matCellDef="let element"> {{element.roles}} </td>
       </ng-container>
 
       <!-- Star Column -->
@@ -41,12 +44,50 @@ import {AppService} from '../../service/app';
   `]
 })
 export class UserIndexPageComponent {
-  displayedColumns = ['name', 'email', 'star'];
+  displayedColumns = ['name', 'roles', 'star'];
   dataSource;
 
   constructor(
     private appService: AppService
   ) {
+
     this.dataSource = this.appService.getUserIndexHttp();
+
+    // v3
+    // this.dataSource = forkJoin(
+    //   this.appService.getUserIndexHttp(),
+    //   this.appService.getRoleIndexHttp()
+    // )
+    //   .pipe((a) => {
+    //     let users = a[0];
+    //     //let roles = a[1];
+    //
+    //     console.log(a);
+    //
+    //     return users;
+    //   });
+
+    // v2
+    // this.dataSource = this.appService.getUserIndexHttp()
+    //   .pipe<IUser[]>(
+    //     flatMap((users) => {
+    //       return this.appService.getRoleIndexHttp()
+    //         .pipe<IUser[]>(
+    //           map<IRole[], IUser[]>((roles) => {
+    //             users;
+    //           });
+    //         );
+    //     })
+    //   );
   }
 }
+
+// .pipe(
+//   map((roles) => {
+//     let kRoles = _.keyBy(roles, 'id');
+//     return users.map((user) => {
+//       user['roles'] = user.roleIds.map((id) => kRoles[id]!.name).join(', ');
+//
+//       return user;
+//     });
+//   })

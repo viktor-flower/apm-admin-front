@@ -5,7 +5,6 @@ import {HttpClient} from '@angular/common/http';
 import * as _ from 'lodash';
 import * as faker from 'faker';
 import {delay, mapTo} from 'rxjs/operators';
-import * as _ from 'lodash';
 
 @Injectable()
 export class FakeAppService extends AppService {
@@ -121,10 +120,14 @@ export class FakeAppService extends AppService {
   }
 
   public getUserItemHttp(id: string): Observable<IUser> {
-    _.find(this.t_storage.users, (u) => {
+    let user = _.find(this.t_storage.users, (u) => {
       return u.id === id;
     });
-    return of(null);
+    if (!user) {
+      user = this.t_storage.users[0];
+    }
+
+    return of(_.clone(user));
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
@@ -137,6 +140,17 @@ export class FakeAppService extends AppService {
 
   public getRoleIndexHttp(): Observable<IRole[]> {
     return of(this.t_storage.roles);
+  }
+
+  public updateUserItem(user: IUser): Observable<boolean> {
+    const index = _.findIndex(this.t_storage.users, (u) => {
+      return u.id === user.id;
+    });
+    if (index !== -1) {
+      this.t_storage.users.splice(index, 1 , user);
+    }
+
+    return of(true);
   }
 
 }
