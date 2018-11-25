@@ -1,8 +1,12 @@
 import {Component} from '@angular/core';
-import {AppService, IRole, IUser} from '../../service/app';
-import {flatMap} from 'tslint/lib/utils';
+import {AppService, IUser} from '../../service/app';
 import {map} from 'rxjs/operators';
-import {forkJoin, Observable} from 'rxjs';
+import {forkJoin} from 'rxjs';
+import * as _ from 'lodash';
+
+export interface IDUser extends IUser {
+  roleName: string[];
+}
 
 @Component({
   selector: 'app-user-index-page-component',
@@ -19,7 +23,7 @@ import {forkJoin, Observable} from 'rxjs';
       <!-- EMail Column -->
       <ng-container matColumnDef="roles" sticky>
         <th mat-header-cell *matHeaderCellDef>Roles</th>
-        <td mat-cell *matCellDef="let element"> {{element.roles}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.roleNames.join(', ')}} </td>
       </ng-container>
 
       <!-- Star Column -->
@@ -39,8 +43,22 @@ import {forkJoin, Observable} from 'rxjs';
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <div class="fixed">
+      <button mat-fab color="accent"  [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
+    </div>
+
+    <mat-menu #localMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/user', 'upsert', 'new']">New</button>
+    </mat-menu>
   `,
   styles: [`
+    .fixed {
+        position: fixed;
+        top: 37px;
+        right: 37px;
+        z-index: 1;
+    }
   `]
 })
 export class UserIndexPageComponent {
@@ -50,44 +68,18 @@ export class UserIndexPageComponent {
   constructor(
     private appService: AppService
   ) {
+    this.dataSource = forkJoin(
+      this.appService.getUserIndexHttp(),
+      this.appService.getRoleIndexHttp()
+    )
+      .pipe(
+        map(([users, roles]) => {
+          return users.map((user) => {
+            user['roleNames'] = user['roleIds'].map((id) => _.find(roles, (r) => r.id === id).name);
 
-    this.dataSource = this.appService.getUserIndexHttp();
-
-    // v3
-    // this.dataSource = forkJoin(
-    //   this.appService.getUserIndexHttp(),
-    //   this.appService.getRoleIndexHttp()
-    // )
-    //   .pipe((a) => {
-    //     let users = a[0];
-    //     //let roles = a[1];
-    //
-    //     console.log(a);
-    //
-    //     return users;
-    //   });
-
-    // v2
-    // this.dataSource = this.appService.getUserIndexHttp()
-    //   .pipe<IUser[]>(
-    //     flatMap((users) => {
-    //       return this.appService.getRoleIndexHttp()
-    //         .pipe<IUser[]>(
-    //           map<IRole[], IUser[]>((roles) => {
-    //             users;
-    //           });
-    //         );
-    //     })
-    //   );
+            return user;
+          });
+        })
+      );
   }
 }
-
-// .pipe(
-//   map((roles) => {
-//     let kRoles = _.keyBy(roles, 'id');
-//     return users.map((user) => {
-//       user['roles'] = user.roleIds.map((id) => kRoles[id]!.name).join(', ');
-//
-//       return user;
-//     });
-//   })

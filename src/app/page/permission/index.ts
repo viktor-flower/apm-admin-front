@@ -17,15 +17,36 @@ import {AppService} from '../../service/app';
       <ng-container matColumnDef="star" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-          <mat-icon>more_vert</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/permission', 'upsert', element.id]">Edit</button>
+          </mat-menu>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
         </td>
       </ng-container>
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <div class="fixed">
+      <button mat-fab color="accent"  [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
+    </div>
+
+    <mat-menu #localMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/permission', 'upsert', 'new']">New</button>
+    </mat-menu>
   `,
   styles: [`
+    .fixed {
+      position: fixed;
+      top: 37px;
+      right: 37px;
+      z-index: 1;
+    }
   `]
 })
 export class PermissionIndexPageComponent {

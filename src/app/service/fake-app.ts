@@ -29,7 +29,6 @@ export class FakeAppService extends AppService {
   ) {
     super(httpClient);
     this.t_storage = this.t_generateStorage();
-    console.log(this.t_storage);
   }
 
   public t_generateStorage() {
@@ -131,18 +130,65 @@ export class FakeAppService extends AppService {
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
-    return of(this.t_storage.users);
+    return of(_.cloneDeep(this.t_storage.users));
   }
 
   public getPermissionIndexHttp(): Observable<IPermission[]> {
-    return of(this.t_storage.permissions);
+    return of(_.cloneDeep(this.t_storage.permissions));
   }
 
   public getRoleIndexHttp(): Observable<IRole[]> {
-    return of(this.t_storage.roles);
+    return of(_.cloneDeep(this.t_storage.roles));
   }
 
-  public updateUserItem(user: IUser): Observable<boolean> {
+  public getPermissionItemHttp(id: string): Observable<IPermission> {
+    let permission = _.find(this.t_storage.permissions, (u) => {
+      return u.id === id;
+    });
+    if (!permission) {
+      permission = this.t_storage.permissions[0];
+    }
+
+    return of(_.clone(permission));
+  }
+
+  public updatePermissionItemHttp(permission: IPermission): Observable<IPermission> {
+    if (permission && !permission.id) {
+      permission.id = faker.random.uuid();
+      this.t_storage.permissions.push(permission);
+
+      return of(permission);
+    }
+
+    const index = _.findIndex(this.t_storage.permissions, (i) => {
+      return i.id === permission.id;
+    });
+    if (index !== -1) {
+      this.t_storage.permissions.splice(index, 1 , permission);
+    }
+
+    return of(permission);
+  }
+
+  public getRoleItemHttp(id: string): Observable<IRole> {
+    let role = _.find(this.t_storage.roles, (r) => {
+      return r.id === id;
+    });
+    if (!role) {
+      role = this.t_storage.roles[0];
+    }
+
+    return of(_.clone(role));
+  }
+
+  public updateUserItemHttp(user: IUser): Observable<IUser> {
+    if (user && !user.id) {
+      user.id = faker.random.uuid();
+      this.t_storage.users.push(user);
+
+      return of(user);
+    }
+
     const index = _.findIndex(this.t_storage.users, (u) => {
       return u.id === user.id;
     });
@@ -150,8 +196,27 @@ export class FakeAppService extends AppService {
       this.t_storage.users.splice(index, 1 , user);
     }
 
-    return of(true);
+    return of(user);
   }
+
+  public updateRoleItemHttp(role: IRole): Observable<IRole> {
+    if (role && !role.id) {
+      role.id = faker.random.uuid();
+      this.t_storage.roles.push(role);
+
+      return of(role);
+    }
+
+    const index = _.findIndex(this.t_storage.roles, (i) => {
+      return i.id === role.id;
+    });
+    if (index !== -1) {
+      this.t_storage.roles.splice(index, 1 , role);
+    }
+
+    return of(role);
+  }
+
 
 }
 

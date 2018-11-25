@@ -9,6 +9,8 @@ import {UserUpsertPageComponent} from './page/user/upsert';
 import {UserIndexPageComponent} from './page/user';
 import {PermissionIndexPageComponent} from './page/permission';
 import {RoleIndexPageComponent} from './page/role';
+import {RoleUpsertPageComponent} from './page/role/upsert';
+import {PermissionUpsertPageComponent} from './page/permission/upsert';
 
 
 const routes: Routes = [
@@ -28,8 +30,18 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard]
   },
   {
+    path: 'permission/upsert/:id',
+    component: PermissionUpsertPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
     path: 'role/index',
     component: RoleIndexPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
+    path: 'role/upsert/:id',
+    component: RoleUpsertPageComponent,
     canActivate: [IsAuthenticatedGuard]
   },
   {

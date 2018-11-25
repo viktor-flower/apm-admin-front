@@ -23,7 +23,6 @@ export class AppComponent {
   }
 
   navigate(route) {
-    console.log(route);
     this.router.navigate(route);
     this.sidenav.close();
   }

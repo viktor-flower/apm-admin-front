@@ -47,7 +47,6 @@ export class AppService {
   public setToken(token) {
     this.token = token;
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
-    console.log('emit', token);
     this.authenticationS.next(this.isAuthenticated());
   }
 
@@ -93,8 +92,8 @@ export class AppService {
     return of(null);
   }
 
-  public updateUserItem(user: IUser): Observable<boolean> {
-    return of(true);
+  public updateUserItemHttp(user: IUser): Observable<IUser> {
+    return of(null);
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
@@ -105,7 +104,22 @@ export class AppService {
     return of([]);
   }
 
+  public getRoleItemHttp(id: string): Observable<IRole> {
+    return of(null);
+  }
+
+  public updateRoleItemHttp(role: IRole): Observable<IRole> {
+    return of(null);
+  }
+
   public getPermissionIndexHttp(): Observable<IPermission[]> {
     return of([]);
+  }
+  public getPermissionItemHttp(id: string): Observable<IRole> {
+    return of(null);
+  }
+
+  public updatePermissionItemHttp(role: IRole): Observable<IRole> {
+    return of(null);
   }
 }

@@ -32,6 +32,8 @@ import {StudentStore} from './state/student.store';
 import {UserIndexPageComponent} from './page/user';
 import {PermissionIndexPageComponent} from './page/permission';
 import {RoleIndexPageComponent} from './page/role';
+import {RoleUpsertPageComponent} from './page/role/upsert';
+import {PermissionUpsertPageComponent} from './page/permission/upsert';
 
 export const matLibraries = [
   MatButtonModule,
@@ -72,7 +74,9 @@ export const allComponents = [
   UserIndexPageComponent,
   UserUpsertPageComponent,
   PermissionIndexPageComponent,
-  RoleIndexPageComponent
+  PermissionUpsertPageComponent,
+  RoleIndexPageComponent,
+  RoleUpsertPageComponent
 ];
 
 export const allProviders: any[] = [

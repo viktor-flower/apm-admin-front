@@ -27,9 +27,6 @@ export class StudentDataService {
       } as Student;
     });
 
-    console.log(students);
-
-    //return of(students);
     return of([]);
   }
 }

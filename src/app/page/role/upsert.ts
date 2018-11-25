@@ -2,17 +2,18 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {of, Subscription} from 'rxjs';
-import {AppService, IRole, IUser} from '../../service/app';
+import {Student} from '../../state/student.model';
+import {AppService, IPermission, IRole, IRole} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
 import {flatMap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {UiService} from '../../service/ui';
 
 @Component({
-  selector: 'app-user-upsert-page-component',
+  selector: 'app-role-upsert-page-component',
   template: `
-    <h2 *ngIf="id === 'new'">Create User</h2>
-    <h2 *ngIf="id !== 'new'">Update User</h2>
+    <h2 *ngIf="id === 'new'">Create Role</h2>
+    <h2 *ngIf="id !== 'new'">Update Role</h2>
     <form [formGroup]="form" (ngSubmit)="submit(model)">
       <formly-form [form]="form" [fields]="fields" [model]="model">
         <div class="action-controls">
@@ -35,25 +36,16 @@ import {UiService} from '../../service/ui';
     }
   `]
 })
-export class UserUpsertPageComponent implements OnInit, OnDestroy {
-  initialUser: IUser;
-  roles: IRole[];
+export class RoleUpsertPageComponent implements OnInit, OnDestroy {
+  initialRole: IRole;
+  permissions: IPermission[];
   id: string;
   isProcessing = false;
+  formData: Student;
   private sub: Subscription;
   private form = new FormGroup({});
   private model = { email: '' };
   private fields: FormlyFieldConfig[] = [
-    {
-      key: 'email',
-      type: 'input',
-      templateOptions: {
-        type: 'email',
-        label: 'Email address',
-        placeholder: 'Enter email',
-        required: true,
-      }
-    },
     {
       key: 'name',
       type: 'input',
@@ -61,6 +53,16 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
         type: 'text',
         label: 'Name',
         placeholder: 'Name',
+        required: true,
+      }
+    },
+    {
+      key: 'description',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Description',
+        placeholder: 'Description',
         required: true,
       }
     }
@@ -74,32 +76,33 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
   ) {}
 
   submit(model) {
-    const updatedUser = _.assignIn(
-      _.clone(this.initialUser),
-      _.pick(this.model, ['name', 'email']),
+    const updatedRole = _.assignIn(
+      _.clone(this.initialRole),
+      _.pick(this.model, ['name', 'description']),
       {
-        roleIds: _(model['role'])
+        permissionIds: _(model['permissions'])
           .pickBy((v, k) => !!v)
           .keys()
           .value()
       }
     );
-    this.appService.updateUserItemHttp(updatedUser)
-      .subscribe((user) => {
+    this.appService.updateRoleItemHttp(updatedRole)
+      .subscribe((role) => {
         if (this.id === 'new') {
-          this.uiService.showMessage('The user has been created successfully.');
+          this.uiService.showMessage('The role has been created successfully.');
         } else {
-          this.uiService.showMessage('The user has been updated successfully.');
+          this.uiService.showMessage('The role has been updated successfully.');
         }
-        this.router.navigate(['/user', 'index']);
+        this.router.navigate(['/role', 'index']);
       });
   }
 
   ngOnInit(): void {
-    this.sub = this.appService.getRoleIndexHttp()
+    this.sub = this.appService.getPermissionIndexHttp()
       .pipe(
-        flatMap((roles) => {
-          this.roles = roles;
+        flatMap((permissions) => {
+          this.permissions = permissions;
+
           return this.activatedRoute.params;
         }),
         flatMap((params) => {
@@ -108,44 +111,44 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
           if (this.id === 'new') {
             return of({
               name: '',
-              email: '',
-              roleIds: []
-            } as IUser);
+              description: '',
+              permissionIds: []
+            } as IRole);
           }
           if (!!this.id) {
-            return this.appService.getUserItemHttp(this.id);
+            return this.appService.getRoleItemHttp(this.id);
           } else {
             return of(null);
           }
         })
       )
-      .subscribe((user) => {
+      .subscribe((role) => {
         // Assigns roles objects according to the roleIds field.
-        this.initialUser = user;
-        this.model = _.pick(this.initialUser, ['name', 'email']);
-        this.model['role'] = _.chain(user.roleIds)
+        this.initialRole = role;
+        this.model = _.pick(this.initialRole, ['name', 'description']);
+        this.model['permissions'] = _.chain(role.permissionIds)
           .map((id) => [id, true])
           .keyBy(0)
           .mapValues((a) => a[1])
           .value();
 
         // Generates role form fields.
-        const roleFields = this.roles.map((role) => {
+        const permissionFields = this.permissions.map((permission) => {
           return {
-            key: role.id,
+            key: permission.id,
             type: 'checkbox',
             templateOptions: {
-              label: role.name
+              label: permission.name
             },
           };
         });
-        const roleGroup = {
-          key: 'role',
+        const permissionGroup = {
+          key: 'permissions',
           wrappers: ['form-field'],
-          templateOptions: { label: 'Role' },
-          fieldGroup: roleFields
+          templateOptions: { label: 'Permissions' },
+          fieldGroup: permissionFields
         };
-        this.fields.push(roleGroup);
+        this.fields.push(permissionGroup);
         this.model = _.clone(this.model);
       });
   }
