@@ -133,6 +133,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "base-ng-app:serve:production"
+            },
+            "local-withot-compiling": {
+              "protractorConfig": "e2e/protractor.conf.js"
             }
           }
         },

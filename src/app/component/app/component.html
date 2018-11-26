@@ -1,18 +1,15 @@
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="push">
     <ng-container *ngIf="isAuthenticatedO | async">
-      <mat-list>
+      <mat-list class="authenticated-menu">
         <mat-list-item>
-          <button mat-button (click)="navigate(['/user', 'index'])">Users</button>
+          <button mat-button (click)="navigate(['/user', 'index'])" class="users-menu-item">Users</button>
         </mat-list-item>
         <mat-list-item>
-          <button mat-button (click)="navigate(['/role', 'index'])">Roles</button>
+          <button mat-button (click)="navigate(['/role', 'index'])" class="roles-menu-item">Roles</button>
         </mat-list-item>
         <mat-list-item>
-          <button mat-button (click)="navigate(['/permission', 'index'])">Permissions</button>
-        </mat-list-item>
-        <mat-list-item>
-          <button mat-button (click)="navigate([''])">List</button>
+          <button mat-button (click)="navigate(['/permission', 'index'])" class="permissions-menu-item">Permissions</button>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
@@ -24,9 +21,9 @@
       </mat-list>
     </ng-container>
     <ng-container *ngIf="!(isAuthenticatedO | async)">
-      <mat-list>
+      <mat-list class="anonymous-menu">
         <mat-list-item>
-          <button mat-button (click)="navigate(['/login'])">Login</button>
+          <button mat-button (click)="navigate(['/login'])" class="login-menu-item">Login</button>
         </mat-list-item>
       </mat-list>
     </ng-container>
@@ -34,7 +31,7 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <button mat-icon-button (click)="sidenav.toggle()">
+        <button mat-icon-button (click)="sidenav.toggle()" class="side-nav-button">
           <mat-icon>menu</mat-icon>
         </button>
         <h1>Welcome to {{ title }}!</h1>

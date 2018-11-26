@@ -8,6 +8,8 @@ import {flatMap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {UiService} from '../../service/ui';
 
+
+
 @Component({
   selector: 'app-user-upsert-page-component',
   template: `
@@ -42,7 +44,11 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
   isProcessing = false;
   private sub: Subscription;
   private form = new FormGroup({});
-  private model = { email: '' };
+  private model: Partial<IUser> = {
+    name: '',
+    email: '',
+    roleIds: []
+  };
   private fields: FormlyFieldConfig[] = [
     {
       key: 'email',
@@ -122,7 +128,7 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
       .subscribe((user) => {
         // Assigns roles objects according to the roleIds field.
         this.initialUser = user;
-        this.model = _.pick(this.initialUser, ['name', 'email']);
+        this.model = _.pick(this.initialUser, ['name', 'description']);
         this.model['role'] = _.chain(user.roleIds)
           .map((id) => [id, true])
           .keyBy(0)

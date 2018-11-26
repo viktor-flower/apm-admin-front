@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {of, Subscription} from 'rxjs';
-import {AppService, IPermission, IRole, IRole} from '../../service/app';
+import {AppService, IPermission} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
 import {flatMap} from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -11,12 +11,19 @@ import {UiService} from '../../service/ui';
 @Component({
   selector: 'app-permission-upsert-page-component',
   template: `
-    <h2 *ngIf="id === 'new'">Create Permissson</h2>
+    <h2 *ngIf="id === 'new'">Create Permission</h2>
     <h2 *ngIf="id !== 'new'">Update Permission</h2>
     <form [formGroup]="form" (ngSubmit)="submit(model)">
       <formly-form [form]="form" [fields]="fields" [model]="model">
         <div class="action-controls">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isProcessing">Submit</button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="submit"
+            [disabled]="form.invalid || isProcessing">
+              Submit
+          </button>
         </div>
       </formly-form>
     </form>
@@ -42,7 +49,10 @@ export class PermissionUpsertPageComponent implements OnInit, OnDestroy {
   isProcessing = false;
   private sub: Subscription;
   private form = new FormGroup({});
-  private model = { email: '' };
+  private model: IPermission = {
+    name: '',
+    description: '',
+  };
   private fields: FormlyFieldConfig[] = [
     {
       key: 'name',

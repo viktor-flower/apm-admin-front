@@ -115,11 +115,11 @@ export class AppService {
   public getPermissionIndexHttp(): Observable<IPermission[]> {
     return of([]);
   }
-  public getPermissionItemHttp(id: string): Observable<IRole> {
+  public getPermissionItemHttp(id: string): Observable<IPermission> {
     return of(null);
   }
 
-  public updatePermissionItemHttp(role: IRole): Observable<IRole> {
+  public updatePermissionItemHttp(permission: IPermission): Observable<IPermission> {
     return of(null);
   }
 }

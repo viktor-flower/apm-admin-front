@@ -3,7 +3,7 @@ import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {of, Subscription} from 'rxjs';
 import {Student} from '../../state/student.model';
-import {AppService, IPermission, IRole, IRole} from '../../service/app';
+import {AppService, IPermission, IRole} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
 import {flatMap} from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -41,10 +41,13 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
   permissions: IPermission[];
   id: string;
   isProcessing = false;
-  formData: Student;
   private sub: Subscription;
   private form = new FormGroup({});
-  private model = { email: '' };
+  private model: IRole = {
+    name: '',
+    description: '',
+    permissionIds: []
+  };
   private fields: FormlyFieldConfig[] = [
     {
       key: 'name',
@@ -125,7 +128,10 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
       .subscribe((role) => {
         // Assigns roles objects according to the roleIds field.
         this.initialRole = role;
-        this.model = _.pick(this.initialRole, ['name', 'description']);
+        this.model = {
+          ..._.pick(this.initialRole, ['name', 'description']),
+          permissionIds: []
+        };
         this.model['permissions'] = _.chain(role.permissionIds)
           .map((id) => [id, true])
           .keyBy(0)
