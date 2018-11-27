@@ -17,7 +17,12 @@ import {UiService} from '../../service/ui';
     <form [formGroup]="form" (ngSubmit)="submit(model)">
       <formly-form [form]="form" [fields]="fields" [model]="model">
         <div class="action-controls">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isProcessing">Submit</button>
+          <button
+            class="submit"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid || isProcessing">Submit</button>
         </div>
       </formly-form>
     </form>
@@ -152,7 +157,8 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
           key: 'permissions',
           wrappers: ['form-field'],
           templateOptions: { label: 'Permissions' },
-          fieldGroup: permissionFields
+          fieldGroup: permissionFields,
+          fieldGroupClassName: 'permission-group'
         };
         this.fields.push(permissionGroup);
         this.model = _.clone(this.model);

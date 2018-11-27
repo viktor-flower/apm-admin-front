@@ -28,10 +28,16 @@ import * as _ from 'lodash';
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
           <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="['/role', 'upsert', element.id]">Edit</button>
+            <button
+              mat-menu-item
+              class="edit-menu-item"
+              [routerLink]="['/role', 'upsert', element.id]">Edit</button>
           </mat-menu>
 
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            mat-icon-button
+            [ngClass]="['group-menu-item', element.id + '-group-menu-item']"
+            [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
         </td>
@@ -42,11 +48,17 @@ import * as _ from 'lodash';
     </table>
 
     <div class="fixed">
-      <button mat-fab color="accent"  [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
+      <button
+        class="local-menu"
+        mat-fab color="accent"
+        [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
     </div>
 
     <mat-menu #localMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/role', 'upsert', 'new']">New</button>
+      <button
+        mat-menu-item
+        [routerLink]="['/role', 'upsert', 'new']"
+        class="new-menu-item">New</button>
     </mat-menu>
   `,
   styles: [`

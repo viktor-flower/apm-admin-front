@@ -18,7 +18,12 @@ import {UiService} from '../../service/ui';
     <form [formGroup]="form" (ngSubmit)="submit(model)">
       <formly-form [form]="form" [fields]="fields" [model]="model">
         <div class="action-controls">
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isProcessing">Submit</button>
+          <button
+            class="submit"
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid || isProcessing">Submit</button>
         </div>
       </formly-form>
     </form>
@@ -55,8 +60,8 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
       type: 'input',
       templateOptions: {
         type: 'email',
-        label: 'Email address',
-        placeholder: 'Enter email',
+        label: 'Email',
+        placeholder: 'Email',
         required: true,
       }
     },
@@ -149,7 +154,8 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
           key: 'role',
           wrappers: ['form-field'],
           templateOptions: { label: 'Role' },
-          fieldGroup: roleFields
+          fieldGroup: roleFields,
+          fieldGroupClassName: 'role-group'
         };
         this.fields.push(roleGroup);
         this.model = _.clone(this.model);

@@ -10,10 +10,10 @@ export class AppPage {
 
   sleepParameters = {
     default: {
-      clicked: 1000,
-      pressed: 100,
-      navigated: 2000,
-      lookAt: 5000
+      clicked: 3000,
+      pressed: 300,
+      navigated: 3000,
+      lookAt: 3000
     },
     fast: {
       clicked: 500,
@@ -35,22 +35,13 @@ export class AppPage {
     await browser.waitForAngular();
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-  }
-
   async clear(key, index = -1) {
-    const el = this.getElement(key, index = -1);
-    const text = await el.getAttribute('value');
-    let chars = '';
-    for (let i = 0; i < text.length; i++) {
-      chars += Key.BACK_SPACE;
-    }
-    await el.sendKeys(chars.toString());
+    const el = this.getElement(key, index);
+    await el.clear();
   }
 
-  sleep(ticks) {
-    return browser.sleep(ticks);
+  async sleep(ticks) {
+    await browser.sleep(ticks);
   }
 
   getElement(key, index = -1) {
@@ -75,7 +66,7 @@ export class AppPage {
 
   async sendKeys(key, keys, index = -1) {
     const el = this.getElement(key, index);
-    await this.clear(el);
+    await el.clear();
     await el.sendKeys(keys);
     await this.wait('pressed');
   }

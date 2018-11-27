@@ -31,10 +31,16 @@ export interface IDUser extends IUser {
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
           <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="['/user', 'upsert', element.id]">Edit</button>
+            <button
+              mat-menu-item
+              class="edit-menu-item"
+              [routerLink]="['/user', 'upsert', element.id]">Edit</button>
           </mat-menu>
 
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            [ngClass]="['group-menu-item', element.id + '-group-menu-item']"
+            mat-icon-button
+            [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
         </td>
@@ -45,11 +51,17 @@ export interface IDUser extends IUser {
     </table>
 
     <div class="fixed">
-      <button mat-fab color="accent"  [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
+      <button
+        class="local-menu"
+        mat-fab color="accent"
+        [matMenuTriggerFor]="localMenu"><mat-icon>menu</mat-icon></button>
     </div>
 
     <mat-menu #localMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/user', 'upsert', 'new']">New</button>
+      <button
+        mat-menu-item
+        class="new-menu-item"
+        [routerLink]="['/user', 'upsert', 'new']">New</button>
     </mat-menu>
   `,
   styles: [`

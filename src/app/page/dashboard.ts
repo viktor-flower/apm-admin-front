@@ -9,7 +9,7 @@ import {Component} from '@angular/core';
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 100%;
+        height: calc(100% - 48px);
     }
     
     img {
