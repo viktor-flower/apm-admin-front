@@ -1,7 +1,7 @@
-import {Query, toBoolean} from '@datorama/akita';
-import {distinctUntilChanged, filter, map, share, tap} from 'rxjs/operators';
+import {Query} from '@datorama/akita';
+import {distinctUntilChanged, map, share} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
-import {SessionState, SessionStore} from './session.store';
+import {SessionState, SessionStore} from './store';
 
 @Injectable({
   providedIn: 'root'

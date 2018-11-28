@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
-import {SessionStore, UserDetails} from '../state/session/session.store';
-import {SessionQuery} from '../state/session/session.query';
-import {createSession, ISession} from '../state/session/session.model';
+import {SessionStore, UserDetails} from '../state/session/store';
+import {SessionQuery} from '../state/session/query';
+import {createSession, ISession} from '../state/session/model';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 

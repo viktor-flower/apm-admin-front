@@ -28,7 +28,6 @@ import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {StubComponentPage} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
-import {StudentStore} from './state/student.store';
 import {UserIndexPageComponent} from './page/user';
 import {PermissionIndexPageComponent} from './page/permission';
 import {RoleIndexPageComponent} from './page/role';

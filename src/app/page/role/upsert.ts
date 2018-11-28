@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {of, Subscription} from 'rxjs';
-import {Student} from '../../state/student.model';
 import {AppService, IPermission, IRole} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
 import {flatMap} from 'rxjs/operators';

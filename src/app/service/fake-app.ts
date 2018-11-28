@@ -5,8 +5,8 @@ import {HttpClient} from '@angular/common/http';
 import * as _ from 'lodash';
 import * as faker from 'faker';
 import {delay, mapTo} from 'rxjs/operators';
-import {SessionQuery} from '../state/session/session.query';
-import {SessionStore} from '../state/session/session.store';
+import {SessionQuery} from '../state/session/query';
+import {SessionStore} from '../state/session/store';
 
 @Injectable()
 export class FakeAppService extends AppService {
