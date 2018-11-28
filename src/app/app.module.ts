@@ -25,7 +25,7 @@ import {UiService} from './service/ui';
 import {ReactiveFormsModule} from '@angular/forms';
 import {IsAnonymousGuard} from './guard/is-anonymous';
 import {IsAuthenticatedGuard} from './guard/is-authenticated';
-import {StubComponentPage} from './page/stub';
+import {StubComponentPageComponent} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
 import {AkitaNgDevtools} from '@datorama/akita-ngdevtools';
 import {UserIndexPageComponent} from './page/user';
@@ -69,7 +69,7 @@ export const allComponents = [
   AppComponent,
   LoginPageComponent,
   DashboardPageComponent,
-  StubComponentPage,
+  StubComponentPageComponent,
   UserIndexPageComponent,
   UserUpsertPageComponent,
   PermissionIndexPageComponent,

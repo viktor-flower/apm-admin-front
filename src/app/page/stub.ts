@@ -4,4 +4,4 @@ import {Component} from '@angular/core';
   selector: 'app-stub-page-component',
   template: `Stub page....`
 })
-export class StubComponentPage {}
+export class StubComponentPageComponent {}

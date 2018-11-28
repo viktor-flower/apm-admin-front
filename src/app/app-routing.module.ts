@@ -4,7 +4,7 @@ import {LoginPageComponent} from './page/login/component';
 import {DashboardPageComponent} from './page/dashboard';
 import {IsAuthenticatedGuard} from './guard/is-authenticated';
 import {IsAnonymousGuard} from './guard/is-anonymous';
-import {StubComponentPage} from './page/stub';
+import {StubComponentPageComponent} from './page/stub';
 import {UserUpsertPageComponent} from './page/user/upsert';
 import {UserIndexPageComponent} from './page/user';
 import {PermissionIndexPageComponent} from './page/permission';
@@ -61,7 +61,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: StubComponentPage
+    component: StubComponentPageComponent
   }
 ];
 

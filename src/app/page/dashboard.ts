@@ -11,7 +11,7 @@ import {Component} from '@angular/core';
         width: 100%;
         height: calc(100% - 48px);
     }
-    
+
     img {
         width: 231px;
         height: 231px;

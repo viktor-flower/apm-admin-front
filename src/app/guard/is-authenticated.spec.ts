@@ -6,8 +6,8 @@ import {ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 
 describe('IsAuthenticatedGuard', () => {
   let service: AppService;
-  let next: ActivatedRouteSnapshot;
-  let state: RouterStateSnapshot;
+  const next: ActivatedRouteSnapshot;
+  const state: RouterStateSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

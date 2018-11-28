@@ -32,7 +32,7 @@ describe('Ui service', () => {
 
   it('Show message', fakeAsync(() => {
     service.showMessage('Test message.', 'info');
-    let messageElement = overlayContainerElement.querySelector('snack-bar-container')!;
+    const messageElement = overlayContainerElement.querySelector('snack-bar-container')!;
     expect(messageElement.textContent).toContain('Test message.',
       'Expected snack bar to show a message without a ViewContainerRef');
     flush();
