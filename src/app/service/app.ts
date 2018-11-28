@@ -2,11 +2,15 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
+import {SessionStore, UserDetails} from '../state/session/session.store';
+import {SessionQuery} from '../state/session/session.query';
+import {createSession, ISession} from '../state/session/session.model';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
 export interface LoginHttpAnswer {
-  token?: string;
+  token: string;
+  userDetails: UserDetails;
 }
 
 export interface IUser {
@@ -31,37 +35,41 @@ export interface IPermission {
 
 @Injectable()
 export class AppService {
-  private authenticationS = new BehaviorSubject<boolean>(false);
-  private authenticationO = this.authenticationS.asObservable();
+  isAuthenticated$ = this.sessionQuery.isLoggedIn$;
   private token: string = null;
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private sessionQuery: SessionQuery,
+    private sessionStore: SessionStore
   ) {
-    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY));
     if (!!token) {
       this.setToken(token);
     }
   }
 
+  isLoggedIn() {
+    return !!this.sessionQuery.getSnapshot().token;
+  }
+
   public setToken(token) {
     this.token = token;
-    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
-    this.authenticationS.next(this.isAuthenticated());
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(token));
+    const session: ISession = {
+      token
+    };
+    this.sessionStore.update(createSession(session));
   }
 
   public isAuthenticated(): boolean {
-    return !!this.token;
-  }
-
-  public getAuthenticationO(): Observable<boolean> {
-    return this.authenticationO;
+    return !!this.sessionQuery.getSnapshot().token;
   }
 
   public login(login: string, password: string): Observable<boolean> {
     return this.loginHttp(login, password)
       .pipe(
-        tap(({token}) => {
+        tap<LoginHttpAnswer>(({token}) => {
           if (!!token) {
             this.setToken(token);
           }
@@ -82,7 +90,7 @@ export class AppService {
   }
 
   protected loginHttp(login: string, password: string): Observable<LoginHttpAnswer> {
-    return this.httpClient.post<{ token: string }>('/server/get-token', {
+    return this.httpClient.post<LoginHttpAnswer>('/server/get-token', {
       login,
       password
     });

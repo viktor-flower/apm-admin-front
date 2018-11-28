@@ -1,6 +1,6 @@
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="push">
-    <ng-container *ngIf="isAuthenticatedO | async">
+    <ng-container *ngIf="isAuthenticated$ | async">
       <mat-list class="authenticated-menu">
         <mat-list-item>
           <button mat-button (click)="navigate(['/user', 'index'])" class="users-menu-item">Users</button>
@@ -20,7 +20,7 @@
         </mat-list-item>
       </mat-list>
     </ng-container>
-    <ng-container *ngIf="!(isAuthenticatedO | async)">
+    <ng-container *ngIf="!(isAuthenticated$ | async)">
       <mat-list class="anonymous-menu">
         <mat-list-item>
           <button mat-button (click)="navigate(['/login'])" class="login-menu-item">Login</button>

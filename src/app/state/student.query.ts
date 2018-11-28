@@ -7,9 +7,7 @@ import {Injectable} from '@angular/core';
 
 export interface IStudentGraphData { [key: string]: Array<string | number>; }
 
-// @Injectable({
-//   providedIn: 'root'
-// })
+// =
 export class StudentQuery extends QueryEntity<StudentState, Student> {
 
   studentGraphData$ = this.selectAll().pipe(

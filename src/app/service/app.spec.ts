@@ -3,7 +3,7 @@ import {AppService} from './app';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {HttpClient} from '@angular/common/http';
 
-describe('App Service', () => {
+fdescribe('App Service', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
   let service: AppService;
@@ -29,13 +29,14 @@ describe('App Service', () => {
   it('Wrong token', () => {
     let loginInvoked = false;
     let authenticationOInvoked = false;
+    service.isAuthenticated$.subscribe((isAuthenticated) => {});
     service.login('user', 'wrongPassword')
       .subscribe((isAuthenticated) => {
         expect(isAuthenticated).toBeFalsy();
         expect(service.isAuthenticated()).toBeFalsy();
         loginInvoked = true;
       });
-      service.getAuthenticationO()
+      service.isAuthenticated$
           .subscribe((isAuthenticated) => {
             expect(isAuthenticated).toBeTruthy();
             authenticationOInvoked = true;
@@ -50,13 +51,15 @@ describe('App Service', () => {
   it('Right token', () => {
     let loginInvoked = false;
     let authenticationOInvoked = false;
+    service.isAuthenticated$.subscribe((isAuthenticated) => {
+    });
     service.login('user', 'password')
       .subscribe((isAuthenticated) => {
         expect(isAuthenticated).toBeTruthy();
         expect(service.isAuthenticated()).toBeTruthy();
         loginInvoked = true;
       });
-    service.getAuthenticationO()
+    service.isAuthenticated$
       .subscribe((isAuthenticated) => {
         expect(isAuthenticated).toBeTruthy();
         authenticationOInvoked = true;

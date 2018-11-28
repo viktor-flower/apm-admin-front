@@ -13,14 +13,12 @@ export class AppComponent {
   @ViewChild('sidenav')
   sidenav: MatSidenav;
   title = 'Application Policy Manager';
-  public isAuthenticatedO: Observable<boolean>;
+  isAuthenticated$ = this.appService.isAuthenticated$;
 
   constructor(
     private appService: AppService,
     private router: Router
-  ) {
-    this.isAuthenticatedO = this.appService.getAuthenticationO();
-  }
+  ) { }
 
   navigate(route) {
     this.router.navigate(route);

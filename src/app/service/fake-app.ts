@@ -5,6 +5,8 @@ import {HttpClient} from '@angular/common/http';
 import * as _ from 'lodash';
 import * as faker from 'faker';
 import {delay, mapTo} from 'rxjs/operators';
+import {SessionQuery} from '../state/session/session.query';
+import {SessionStore} from '../state/session/session.store';
 
 @Injectable()
 export class FakeAppService extends AppService {
@@ -25,9 +27,11 @@ export class FakeAppService extends AppService {
   };
 
   constructor(
-    httpClient: HttpClient
+    httpClient: HttpClient,
+    sessionQuery: SessionQuery,
+    sessionStore: SessionStore
   ) {
-    super(httpClient);
+    super(httpClient, sessionQuery, sessionStore);
     this.t_storage = this.t_generateStorage();
   }
 
@@ -110,12 +114,17 @@ export class FakeAppService extends AppService {
     const user = _.find(this.t_users, (u) => u.login === login);
 
     if (!!user && user.password === password) {
-      return this.t_delay(of({
-        token: 'token-1234567'
-      }));
+      return this.t_delay<LoginHttpAnswer>(of({
+        token: 'token-1234567',
+        userDetails: {
+          id: '69f',
+          email: 'test@example.com',
+          name: 'Test'
+        }
+      } as LoginHttpAnswer));
     }
 
-    return this.t_delay(of({}));
+    return this.t_delay(of(null));
   }
 
   public getUserItemHttp(id: string): Observable<IUser> {
