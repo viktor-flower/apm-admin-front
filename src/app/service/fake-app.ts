@@ -14,7 +14,7 @@ export class FakeAppService extends AppService {
 
   private t_users = [
     {
-      login: 'admin',
+      name: 'admin',
       password: 'passwd',
       token: 'token-1234567'
     }
@@ -65,37 +65,39 @@ export class FakeAppService extends AppService {
   }
 
   public t_generatePermissions() {
-    return [
-      ['Review deployment groups', 'review_deplyment_groups'],
-      ['Review report', 'review_report'],
-      ['Review store', 'review_store'],
-      ['Review assigned store', 'review_assigned_store'],
-      ['Review refresh station', 'review_refresh_station'],
-      ['Review refresh session', 'review_refresh_session'],
-      ['Review assigned refresh station', 'review_assigned_refresh_station'],
-      ['Review audit report', 'review_audit_report'],
-      ['Manage refresh station', 'manage_refresh_station'],
-      ['Manage deployment groups', 'manage_deplyment_groups'],
-    ].map((i) => {
-      return {
-        id: faker.random.uuid(),
-        name: i[0],
-        description: `It has a system key ${i[1]}.`
-      } as IPermission;
-    });
+    return [];
+    // return [
+    //   ['Review deployment groups', 'review_deplyment_groups'],
+    //   ['Review report', 'review_report'],
+    //   ['Review store', 'review_store'],
+    //   ['Review assigned store', 'review_assigned_store'],
+    //   ['Review refresh station', 'review_refresh_station'],
+    //   ['Review refresh session', 'review_refresh_session'],
+    //   ['Review assigned refresh station', 'review_assigned_refresh_station'],
+    //   ['Review audit report', 'review_audit_report'],
+    //   ['Manage refresh station', 'manage_refresh_station'],
+    //   ['Manage deployment groups', 'manage_deplyment_groups'],
+    // ].map((i) => {
+    //   return {
+    //     id: faker.random.uuid(),
+    //     name: i[0],
+    //     description: `It has a system key ${i[1]}.`
+    //   } as IPermission;
+    // });
   }
 
   public t_generateUsers(roles: IRole[], count: number = 10): IUser[] {
-    return _.range(count).map((index) => {
-      const name = faker.name.firstName();
-
-      return {
-        id: faker.random.uuid(),
-        name,
-        email: faker.internet.email(name),
-        roleIds: _.map(roles, 'id').filter((e) => faker.random.boolean())
-      } as IUser;
-    });
+    return [];
+    // return _.range(count).map((index) => {
+    //   const name = faker.name.firstName();
+    //
+    //   return {
+    //     id: faker.random.uuid(),
+    //     name,
+    //     email: faker.internet.email(name),
+    //     roleIds: _.map(roles, 'id').filter((e) => faker.random.boolean())
+    //   } as IUser;
+    // });
   }
 
   public t_setDelay(_delay: number) {
@@ -110,8 +112,8 @@ export class FakeAppService extends AppService {
     return o;
   }
 
-  protected loginHttp(login: string, password: string): Observable<LoginHttpAnswer> {
-    const user = _.find(this.t_users, (u) => u.login === login);
+  protected loginHttp(name: string, password: string): Observable<LoginHttpAnswer> {
+    const user = _.find(this.t_users, (u) => u.name === name);
 
     if (!!user && user.password === password) {
       return this.t_delay<LoginHttpAnswer>(of({
@@ -151,32 +153,36 @@ export class FakeAppService extends AppService {
   }
 
   public getPermissionItemHttp(id: string): Observable<IPermission> {
-    let permission = _.find(this.t_storage.permissions, (u) => {
-      return u.id === id;
-    });
-    if (!permission) {
-      permission = this.t_storage.permissions[0];
-    }
+    return of(null);
 
-    return of(_.clone(permission));
+    // let permission = _.find(this.t_storage.permissions, (u) => {
+    //   return u.id === id;
+    // });
+    // if (!permission) {
+    //   permission = this.t_storage.permissions[0];
+    // }
+    //
+    // return of(_.clone(permission));
   }
 
   public updatePermissionItemHttp(permission: IPermission): Observable<IPermission> {
-    if (permission && !permission.id) {
-      permission.id = faker.random.uuid();
-      this.t_storage.permissions.push(permission);
+    return of(null);
 
-      return of(permission);
-    }
-
-    const index = _.findIndex(this.t_storage.permissions, (i) => {
-      return i.id === permission.id;
-    });
-    if (index !== -1) {
-      this.t_storage.permissions.splice(index, 1 , permission);
-    }
-
-    return of(permission);
+    // if (permission && !permission.id) {
+    //   permission.id = faker.random.uuid();
+    //   this.t_storage.permissions.push(permission);
+    //
+    //   return of(permission);
+    // }
+    //
+    // const index = _.findIndex(this.t_storage.permissions, (i) => {
+    //   return i.id === permission.id;
+    // });
+    // if (index !== -1) {
+    //   this.t_storage.permissions.splice(index, 1 , permission);
+    // }
+    //
+    // return of(permission);
   }
 
   public getRoleItemHttp(id: string): Observable<IRole> {

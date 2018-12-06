@@ -10,7 +10,7 @@ import {AppService} from '../../service/app';
       <!-- Name Column -->
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element"> {{element.name}}</td>
+        <td mat-cell *matCellDef="let element"> {{element.title}}</td>
       </ng-container>
 
       <!-- Star Column -->
@@ -20,7 +20,7 @@ import {AppService} from '../../service/app';
           <mat-menu #menu="matMenu">
             <button
               mat-menu-item
-              [routerLink]="['/permission', 'upsert', element.id]"
+              [routerLink]="['/permission', 'upsert', element._id]"
               class="edit-menu-item">Edit</button>
           </mat-menu>
 

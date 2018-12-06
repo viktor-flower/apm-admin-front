@@ -13,13 +13,13 @@ import * as _ from 'lodash';
       <!-- Name Column -->
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
       </ng-container>
 
       <!-- Permissions Column -->
       <ng-container matColumnDef="permissions" sticky>
         <th mat-header-cell *matHeaderCellDef>Permisssions</th>
-        <td mat-cell *matCellDef="let element"> {{element.permissionNames.join(', ')}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.permissionTitles.join(', ')}} </td>
       </ng-container>
 
 
@@ -31,12 +31,12 @@ import * as _ from 'lodash';
             <button
               mat-menu-item
               class="edit-menu-item"
-              [routerLink]="['/role', 'upsert', element.id]">Edit</button>
+              [routerLink]="['/role', 'upsert', element._id]">Edit</button>
           </mat-menu>
 
           <button
             mat-icon-button
-            [ngClass]="['group-menu-item', element.id + '-group-menu-item']"
+            [ngClass]="['group-menu-item', element._id + '-group-menu-item']"
             [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
           </button>
@@ -77,18 +77,15 @@ export class RoleIndexPageComponent {
   constructor(
     private appService: AppService
   ) {
-    this.dataSource = forkJoin(
-      this.appService.getPermissionIndexHttp(),
-      this.appService.getRoleIndexHttp()
-    )
+    this.dataSource = this.appService.getRoleIndexHttp()
       .pipe(
-        map(([permissions, roles]) => {
+        map((roles) => {
           return roles.map((role) => {
-            role['permissionNames'] = role.permissionIds.map((permissionId) => _.find(permissions, (p) => p.id === permissionId ).name);
+            role['permissionTitles'] = role.permissions.map((p) => p.title);
 
             return role;
           });
         })
-      );
+      )
   }
 }

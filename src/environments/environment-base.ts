@@ -1,9 +1,16 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environmentBase-base.ts` with `environmentBase.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
-// import { environmentBase, EEnvoronmentMode } from 'src/environments/environment-base';
 
-export const environment = {};
+export enum EEnvoronmentMode {
+  PRODUCTION,
+  FAKE,
+  DEV
+}
+
+export const environmentBase = {
+  mode: EEnvoronmentMode.PRODUCTION
+};
 
 /*
  * For easier debugging in development mode, you can import the following file

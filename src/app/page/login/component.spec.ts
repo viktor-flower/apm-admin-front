@@ -55,7 +55,7 @@ describe('Page Login', () => {
 
   it('Wrong credentials', fakeAsync(() => {
     component.form.patchValue({
-      login: 'admin',
+      name: 'admin',
       password: 'passwdWrong'
     });
     component.save();
@@ -66,7 +66,7 @@ describe('Page Login', () => {
 
   it('Right credentials', fakeAsync(() => {
     component.form.patchValue({
-      login: 'admin',
+      name: 'admin',
       password: 'passwd'
     });
     component.save();

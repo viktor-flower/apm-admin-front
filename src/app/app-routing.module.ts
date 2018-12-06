@@ -30,7 +30,7 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard]
   },
   {
-    path: 'permission/upsert/:id',
+    path: 'permission/upsert/:_id',
     component: PermissionUpsertPageComponent,
     canActivate: [IsAuthenticatedGuard]
   },
@@ -40,7 +40,7 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard]
   },
   {
-    path: 'role/upsert/:id',
+    path: 'role/upsert/:_id',
     component: RoleUpsertPageComponent,
     canActivate: [IsAuthenticatedGuard]
   },
@@ -55,7 +55,7 @@ const routes: Routes = [
     canActivate: [IsAuthenticatedGuard]
   },
   {
-    path: 'user/upsert/:id',
+    path: 'user/upsert/:_id',
     component: UserUpsertPageComponent,
     canActivate: [IsAuthenticatedGuard]
   },

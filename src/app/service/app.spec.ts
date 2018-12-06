@@ -42,7 +42,7 @@ fdescribe('App Service', () => {
             authenticationOInvoked = true;
           });
 
-    const req = httpTestingController.expectOne('/server/get-token');
+    const req = httpTestingController.expectOne('/server/anonymouse/get-token');
     req.flush(tdTokenEmpty);
     expect(loginInvoked).toBeTruthy();
     expect(authenticationOInvoked).toBeFalsy();
@@ -65,7 +65,7 @@ fdescribe('App Service', () => {
         authenticationOInvoked = true;
       });
 
-    const req = httpTestingController.expectOne('/server/get-token');
+    const req = httpTestingController.expectOne('/server/anonymouse/get-token');
     req.flush(tdTokenExists);
     expect(loginInvoked).toBeTruthy();
     expect(authenticationOInvoked).toBeTruthy();

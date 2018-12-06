@@ -7,15 +7,19 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
-  MatFormFieldModule, MatIconModule,
-  MatInputModule, MatListModule, MatMenuModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
   MatSidenavModule,
-  MatSnackBarModule, MatTableModule,
+  MatSnackBarModule,
+  MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 import {DashboardPageComponent} from './page/dashboard';
 import {LoginPageComponent} from './page/login/component';
-import { environment } from '../environments/environment';
+import {EEnvoronmentMode, environmentBase} from '../environments/environment-base';
 import {AppService} from './service/app';
 import {FakeAppService} from './service/fake-app';
 import {FormlyMaterialModule} from '@ngx-formly/material';
@@ -61,7 +65,7 @@ export const allLibraries = [
     ]
   }),
   FormlyMaterialModule,
-  environment.production ? [] : AkitaNgDevtools.forRoot(),
+  environmentBase.mode === EEnvoronmentMode.PRODUCTION ? [] : AkitaNgDevtools.forRoot(),
   ...matLibraries
 ];
 
@@ -85,7 +89,7 @@ export const allProviders: any[] = [
 ];
 
 // Injects a fake service to be able to work without backend for presentation purpose.
-if (!!environment.fake) {
+if (environmentBase.mode === EEnvoronmentMode.FAKE) {
   allProviders.push({
     provide: AppService,
     useClass: FakeAppService

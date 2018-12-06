@@ -80,18 +80,6 @@ export class UserIndexPageComponent {
   constructor(
     private appService: AppService
   ) {
-    this.dataSource = forkJoin(
-      this.appService.getUserIndexHttp(),
-      this.appService.getRoleIndexHttp()
-    )
-      .pipe(
-        map(([users, roles]) => {
-          return users.map((user) => {
-            user['roleNames'] = user['roleIds'].map((id) => _.find(roles, (r) => r.id === id).name);
-
-            return user;
-          });
-        })
-      );
+    this.dataSource = this.appService.getUserIndexHttp();
   }
 }

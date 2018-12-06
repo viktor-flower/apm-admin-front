@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {flatMap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {UiService} from '../../service/ui';
+import {PartialDeep} from 'lodash';
 
 @Component({
   selector: 'app-permission-upsert-page-component',
@@ -45,12 +46,13 @@ import {UiService} from '../../service/ui';
 export class PermissionUpsertPageComponent implements OnInit, OnDestroy {
   initialPermission: IPermission;
   permissions: IPermission[];
-  id: string;
+  _id: string;
   isProcessing = false;
   private sub: Subscription;
   private form = new FormGroup({});
-  private model: IPermission = {
+  private model: PartialDeep<IPermission> = {
     name: '',
+    title: '',
     description: '',
   };
   private fields: FormlyFieldConfig[] = [
@@ -65,13 +67,23 @@ export class PermissionUpsertPageComponent implements OnInit, OnDestroy {
       }
     },
     {
+      key: 'title',
+      type: 'input',
+      templateOptions: {
+        type: 'text',
+        label: 'Title',
+        placeholder: 'Title',
+        required: true,
+      }
+    },
+    {
       key: 'description',
       type: 'input',
       templateOptions: {
         type: 'text',
         label: 'Description',
         placeholder: 'Description',
-        required: true,
+        required: false,
       }
     }
   ];
@@ -83,45 +95,52 @@ export class PermissionUpsertPageComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  submit(model) {
-    const updatedPermission = _.assignIn(
-      _.clone(this.initialPermission),
-      _.pick(this.model, ['name', 'description'])
-    );
-    this.appService.updatePermissionItemHttp(updatedPermission)
-      .subscribe((permission) => {
-        if (this.id === 'new') {
+  submit(model, done = () => {}) {
+    const updatedPermission = {
+      ..._.clone(this.initialPermission),
+      ..._.pick(this.model, 'name', 'title', 'description')
+    };
+
+    if (this._id === 'new') {
+      console.log(updatedPermission);
+      this.appService.createPermissionItemHttp(updatedPermission)
+        .subscribe(() => {
           this.uiService.showMessage('The permission has been created successfully.');
-        } else {
+          this.router.navigate(['/permission', 'index']);
+          done();
+        });
+    } else {
+      this.appService.updatePermissionItemHttp(updatedPermission)
+        .subscribe(() => {
           this.uiService.showMessage('The permission has been updated successfully.');
-        }
-        this.router.navigate(['/permission', 'index']);
-      });
+          this.router.navigate(['/permission', 'index']);
+          done();
+        });
+    }
   }
 
   ngOnInit(): void {
     this.sub = this.activatedRoute.params
       .pipe(
         flatMap((params) => {
-          this.id = params.id;
+          this._id = params._id;
 
-          if (this.id === 'new') {
+          if (this._id === 'new') {
             return of({
               name: '',
               description: '',
             } as IPermission);
           }
-          if (!!this.id) {
-            return this.appService.getPermissionItemHttp(this.id);
+          if (!!this._id) {
+            return this.appService.getPermissionItemHttp(this._id);
           } else {
             return of(null);
           }
         })
       )
       .subscribe((permission) => {
-        // Assigns roles objects according to the roleIds field.
         this.initialPermission = permission;
-        this.model = _.pick(this.initialPermission, ['name', 'description']);
+        this.model = _.pick(this.initialPermission, 'name', 'title', 'description');
       });
   }
 

@@ -1,3 +1,6 @@
+import { environmentBase, EEnvoronmentMode } from 'src/environments/environment-base';
+
 export const environment = {
-  production: true
+  ...environmentBase,
+  mode: EEnvoronmentMode.PRODUCTION
 };

@@ -33,6 +33,14 @@
             "scripts": []
           },
           "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
             "fake": {
               "fileReplacements": [
                 {
@@ -73,6 +81,10 @@
             "browserTarget": "base-ng-app:build"
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "base-ng-app:build:dev",
+              "proxyConfig": "proxy.conf.json"
+            },
             "fake": {
               "browserTarget": "base-ng-app:build:fake"
             },

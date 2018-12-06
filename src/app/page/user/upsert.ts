@@ -51,15 +51,15 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
   private form = new FormGroup({});
   private model: Partial<IUser> = {
     name: '',
-    email: '',
-    roleIds: []
+    description: '',
+    roles:[]
   };
   private fields: FormlyFieldConfig[] = [
     {
-      key: 'email',
+      key: 'description',
       type: 'input',
       templateOptions: {
-        type: 'email',
+        type: 'description',
         label: 'Email',
         placeholder: 'Email',
         required: true,
@@ -87,7 +87,7 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
   submit(model) {
     const updatedUser = _.assignIn(
       _.clone(this.initialUser),
-      _.pick(this.model, ['name', 'email']),
+      _.pick(this.model, ['name', 'description']),
       {
         roleIds: _(model['role'])
           .pickBy((v, k) => !!v)
@@ -107,59 +107,62 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub = this.appService.getRoleIndexHttp()
-      .pipe(
-        flatMap((roles) => {
-          this.roles = roles;
-          return this.activatedRoute.params;
-        }),
-        flatMap((params) => {
-          this.id = params.id;
+    console.log('a.a.a.');
 
-          if (this.id === 'new') {
-            return of({
-              name: '',
-              email: '',
-              roleIds: []
-            } as IUser);
-          }
-          if (!!this.id) {
-            return this.appService.getUserItemHttp(this.id);
-          } else {
-            return of(null);
-          }
-        })
-      )
-      .subscribe((user) => {
-        // Assigns roles objects according to the roleIds field.
-        this.initialUser = user;
-        this.model = _.pick(this.initialUser, ['name', 'description']);
-        this.model['role'] = _.chain(user.roleIds)
-          .map((id) => [id, true])
-          .keyBy(0)
-          .mapValues((a) => a[1])
-          .value();
 
-        // Generates role form fields.
-        const roleFields = this.roles.map((role) => {
-          return {
-            key: role.id,
-            type: 'checkbox',
-            templateOptions: {
-              label: role.name
-            },
-          };
-        });
-        const roleGroup = {
-          key: 'role',
-          wrappers: ['form-field'],
-          templateOptions: { label: 'Role' },
-          fieldGroup: roleFields,
-          fieldGroupClassName: 'role-group'
-        };
-        this.fields.push(roleGroup);
-        this.model = _.clone(this.model);
-      });
+    // this.sub = this.appService.getRoleIndexHttp()
+    //   .pipe(
+    //     flatMap((roles) => {
+    //       this.roles = roles;
+    //       return this.activatedRoute.params;
+    //     }),
+    //     flatMap((params) => {
+    //       this.id = params.id;
+    //
+    //       if (this.id === 'new') {
+    //         return of({
+    //           name: '',
+    //           description: '',
+    //           roleIds: []
+    //         } as IUser);
+    //       }
+    //       if (!!this.id) {
+    //         return this.appService.getUserItemHttp(this.id);
+    //       } else {
+    //         return of(null);
+    //       }
+    //     })
+    //   )
+    //   .subscribe((user) => {
+    //     // Assigns roles objects according to the roleIds field.
+    //     this.initialUser = user;
+    //     this.model = _.pick(this.initialUser, ['name', 'description']);
+    //     this.model['role'] = _.chain(user.roleIds)
+    //       .map((id) => [id, true])
+    //       .keyBy(0)
+    //       .mapValues((a) => a[1])
+    //       .value();
+    //
+    //     // Generates role form fields.
+    //     const roleFields = this.roles.map((role) => {
+    //       return {
+    //         key: role.id,
+    //         type: 'checkbox',
+    //         templateOptions: {
+    //           label: role.name
+    //         },
+    //       };
+    //     });
+    //     const roleGroup = {
+    //       key: 'role',
+    //       wrappers: ['form-field'],
+    //       templateOptions: { label: 'Role' },
+    //       fieldGroup: roleFields,
+    //       fieldGroupClassName: 'role-group'
+    //     };
+    //     this.fields.push(roleGroup);
+    //     this.model = _.clone(this.model);
+    //   });
   }
 
   ngOnDestroy() {

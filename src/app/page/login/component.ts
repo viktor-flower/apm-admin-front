@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 export class LoginPageComponent {
   public isProcessing = false;
   public form = this.fb.group({
-    login: ['', Validators.required],
+    name: ['', Validators.required],
     password: ['', Validators.required]
   });
 
@@ -30,16 +30,22 @@ export class LoginPageComponent {
   public save() {
     this.isProcessing = true;
     this.appService.login(
-      this.form.controls['login'].value,
+      this.form.controls['name'].value,
       this.form.controls['password'].value
     )
-      .subscribe((isAuthenticated) => {
-        if (isAuthenticated) {
-          this.uiService.showMessage('You have been authenticated successfuly.', 'info');
-          this.router.navigate(['/']);
-        } else {
+      .subscribe(
+        (isAuthenticated) => {
+          if (isAuthenticated) {
+            this.uiService.showMessage('You have been authenticated successfuly.', 'info');
+            this.router.navigate(['/']);
+          } else {
+            this.uiService.showMessage('Wrong authentication data.', 'info');
+          }
+        },
+        (error) => {
+          this.isProcessing = false;
           this.uiService.showMessage('Wrong authentication data.', 'info');
-        }
-      }, null, () => this.isProcessing = false);
+        },
+        () => this.isProcessing = false);
   }
 }

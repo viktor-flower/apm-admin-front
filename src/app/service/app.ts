@@ -5,6 +5,7 @@ import {map, tap} from 'rxjs/operators';
 import {SessionStore, UserDetails} from '../state/session/store';
 import {SessionQuery} from '../state/session/query';
 import {createSession, ISession} from '../state/session/model';
+import {PartialDeep} from 'lodash';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
@@ -16,21 +17,24 @@ export interface LoginHttpAnswer {
 export interface IUser {
   id?: string;
   name: string;
-  email: string;
-  roleIds: string[];
+  description: string;
+  roles: IRole[];
 }
 
 export interface IRole {
   id?: string;
   name: string;
+  title: string;
   description: string;
   permissionIds: string[];
+  permissions?: IPermission[];
 }
 
 export interface IPermission {
-  id?: string;
+  _id?: string;
   name: string;
-  description: string;
+  title: string;
+  description?: string;
 }
 
 @Injectable()
@@ -62,12 +66,16 @@ export class AppService {
     this.sessionStore.update(createSession(session));
   }
 
-  public isAuthenticated(): boolean {
-    return !!this.sessionQuery.getSnapshot().token;
+  public getToken() {
+    return this.sessionQuery.getSnapshot().token;
   }
 
-  public login(login: string, password: string): Observable<boolean> {
-    return this.loginHttp(login, password)
+  public isAuthenticated(): boolean {
+    return !!this.getToken();
+  }
+
+  public login(name: string, password: string): Observable<boolean> {
+    return this.loginHttp(name, password)
       .pipe(
         tap<LoginHttpAnswer>(({token}) => {
           if (!!token) {
@@ -89,15 +97,18 @@ export class AppService {
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
   }
 
-  protected loginHttp(login: string, password: string): Observable<LoginHttpAnswer> {
-    return this.httpClient.post<LoginHttpAnswer>('/server/get-token', {
-      login,
+  protected loginHttp(name: string, password: string): Observable<LoginHttpAnswer> {
+    return this.httpClient.post<LoginHttpAnswer>('/server/anonymouse/get-token', {
+      name,
       password
     });
   }
 
   public getUserItemHttp(id: string): Observable<IUser> {
-    return of(null);
+    return this.httpClient.get<any>(`/server/admin/user/item/${id}`)
+      .pipe(
+        map(({user}) => user)
+      );
   }
 
   public updateUserItemHttp(user: IUser): Observable<IUser> {
@@ -105,15 +116,24 @@ export class AppService {
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
-    return of([]);
+    return this.httpClient.get<any>(`/server/admin/user/list`)
+      .pipe(
+        map(({ list }) => list)
+      );
   }
 
   public getRoleIndexHttp(): Observable<IRole[]> {
-    return of([]);
+    return this.httpClient.get<any>(`/server/admin/role/list`)
+      .pipe(
+        map(({ list }) => list)
+      );
   }
 
-  public getRoleItemHttp(id: string): Observable<IRole> {
-    return of(null);
+  public getRoleItemHttp(_id: string): Observable<IRole> {
+    return this.httpClient.get<any>(`/server/admin/role/item/${_id}`)
+      .pipe(
+        map(({role}) => role)
+      );
   }
 
   public updateRoleItemHttp(role: IRole): Observable<IRole> {
@@ -121,13 +141,24 @@ export class AppService {
   }
 
   public getPermissionIndexHttp(): Observable<IPermission[]> {
-    return of([]);
+    return this.httpClient.get<any>(`/server/admin/permission/list`)
+      .pipe(
+        map(({ list }) => list)
+      );
   }
-  public getPermissionItemHttp(id: string): Observable<IPermission> {
-    return of(null);
+
+  public getPermissionItemHttp(_id: string): Observable<IPermission> {
+    return this.httpClient.get<any>(`/server/admin/permission/item/${_id}`)
+      .pipe(
+        map(({permission}) => permission)
+      );
   }
 
   public updatePermissionItemHttp(permission: IPermission): Observable<IPermission> {
-    return of(null);
+    return this.httpClient.post<any>('/server/admin/permission/save', { permission });
+  }
+
+  public createPermissionItemHttp(permission: IPermission): Observable<IPermission> {
+    return this.httpClient.post<any>('/server/admin/permission/create', { permission });
   }
 }
