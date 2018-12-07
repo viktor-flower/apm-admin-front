@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AppService, IUser} from '../../service/app';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {forkJoin} from 'rxjs';
 import * as _ from 'lodash';
 
@@ -23,7 +23,7 @@ export interface IDUser extends IUser {
       <!-- EMail Column -->
       <ng-container matColumnDef="roles" sticky>
         <th mat-header-cell *matHeaderCellDef>Roles</th>
-        <td mat-cell *matCellDef="let element"> {{element.roleNames.join(', ')}} </td>
+        <td mat-cell *matCellDef="let element"> {{element.roleTitles.join(', ')}} </td>
       </ng-container>
 
       <!-- Star Column -->
@@ -34,11 +34,11 @@ export interface IDUser extends IUser {
             <button
               mat-menu-item
               class="edit-menu-item"
-              [routerLink]="['/user', 'upsert', element.id]">Edit</button>
+              [routerLink]="['/user', 'upsert', element._id]">Edit</button>
           </mat-menu>
 
           <button
-            [ngClass]="['group-menu-item', element.id + '-group-menu-item']"
+            [ngClass]="['group-menu-item', element._id + '-group-menu-item']"
             mat-icon-button
             [matMenuTriggerFor]="menu">
             <mat-icon>more_vert</mat-icon>
@@ -80,6 +80,15 @@ export class UserIndexPageComponent {
   constructor(
     private appService: AppService
   ) {
-    this.dataSource = this.appService.getUserIndexHttp();
+    this.dataSource = this.appService.getUserIndexHttp()
+      .pipe(
+        map((users) => {
+          return users.map((user) => {
+            user['roleTitles'] = user['roles'].map((r) => r.title);
+
+            return user;
+          });
+        })
+      );
   }
 }

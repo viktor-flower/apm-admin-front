@@ -4,10 +4,9 @@ import {FormlyFieldConfig} from '@ngx-formly/core';
 import {forkJoin, of, Subscription} from 'rxjs';
 import {AppService, IPermission, IRole} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
-import {flatMap, tap} from 'rxjs/operators';
+import {flatMap, take, tap} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {UiService} from '../../service/ui';
-import {PartialDeep} from 'lodash';
 
 @Component({
   selector: 'app-role-upsert-page-component',
@@ -42,18 +41,21 @@ import {PartialDeep} from 'lodash';
   `]
 })
 export class RoleUpsertPageComponent implements OnInit, OnDestroy {
-  initialRole: IRole;
+  // initialRole: IRole;
+  initialRole: any ;
   permissions: IPermission[];
   _id: string;
   isProcessing = false;
   private sub: Subscription;
   private form = new FormGroup({});
   private formIsBuilt = false;
-  private model: PartialDeep<IRole> = {
+  // @todo Redisign.
+  //private model: PartialDeep<IRole> = {
+  private model: any = {
     name: '',
     title: '',
     description: '',
-    permissionIds: []
+    permissions: {}
   };
   private fields: FormlyFieldConfig[] = [
     {
@@ -95,31 +97,36 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
     private router: Router
   ) {}
 
-  submit(model) {
-    // const updatedRole = _.assignIn(
-    //   _.clone(this.initialRole),
-    //   _.pick(this.model, ['name', 'description']),
-    //   {
-    //     permissionIds: _(model['permissions'])
-    //       .pickBy((v, k) => !!v)
-    //       .keys()
-    //       .value()
-    //   }
-    // );
-    // this.appService.updateRoleItemHttp(updatedRole)
-    //   .subscribe((role) => {
-    //     if (this._id === 'new') {
-    //       this.uiService.showMessage('The role has been created successfully.');
-    //     } else {
-    //       this.uiService.showMessage('The role has been updated successfully.');
-    //     }
-    //     this.router.navigate(['/role', 'index']);
-    //   });
+  submit(model, done = () => {}) {
+    const updatedRole: IRole = {
+      ..._.clone(this.initialRole) as IRole,
+      ..._.pick(this.model, 'name', 'title', 'description') as IRole,
+      permissionIds: _(this.model.permissions)
+        .toPairs()
+        .filter(a => !!a[1])
+        .map(a => a[0])
+        .value()
+    };
+
+    if (this._id === 'new') {
+      this.appService.createRoleItemHttp(updatedRole)
+        .subscribe(() => {
+          this.uiService.showMessage('The role has been created successfully.');
+          this.router.navigate(['/role', 'index']);
+          done();
+        });
+    } else {
+      this.appService.updateRoleItemHttp(updatedRole)
+        .subscribe(() => {
+          this.uiService.showMessage('The role has been updated successfully.');
+          this.router.navigate(['/role', 'index']);
+          done();
+        });
+    }
   }
 
   ngOnInit(): void {
-    this.sub = null;
-    forkJoin(
+    this.sub = forkJoin(
       this.activatedRoute.params
         .pipe(
           flatMap((params) => {
@@ -129,28 +136,21 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
               return of({
                 name: '',
                 description: '',
-                permissionIds: []
+                permissionIds: [],
+                permissions: []
               } as IRole);
             }
             if (!!this._id) {
               return this.appService.getRoleItemHttp(this._id)
-                .pipe(
-                  tap((d) => console.log(d))
-                );
             } else {
               return of(null);
             }
           }),
-          tap((d) => console.log(d))
+          take(1)
         ),
-      this.appService.getPermissionIndexHttp()
-        .pipe(
-          tap((d) => console.log(d))
-        )
+      this.appService.getPermissionIndexHttp().pipe(take(1))
     )
-      .pipe((d) => console.log(d))
       .subscribe(([role, permissions]) => {
-        console.log(role, permissions);
         this.initialRole = role;
         this.permissions = permissions;
 
@@ -172,10 +172,13 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
           fieldGroupClassName: 'permission-group'
         };
         this.fields.push(permissionGroup);
-        console.log(permissionGroup);
 
         // Sets the form model.
-        this.model = _.pick(this.initialRole, 'name', 'title', 'description', 'permissionIds');
+        this.model = _.pick(this.initialRole, 'name', 'title', 'description');
+        this.model.permissions = _(this.permissions.map((permission) => {
+          return [permission._id, !!this.initialRole['permissions'].find(rolePermission => rolePermission._id === permission._id)]
+        })).keyBy(0).mapValues(a => a[1]).value();
+
         this.formIsBuilt = true;
       });
   }

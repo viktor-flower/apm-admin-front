@@ -18,7 +18,7 @@ import * as _ from 'lodash';
 
       <!-- Permissions Column -->
       <ng-container matColumnDef="permissions" sticky>
-        <th mat-header-cell *matHeaderCellDef>Permisssions</th>
+        <th mat-header-cell *matHeaderCellDef>Permissions</th>
         <td mat-cell *matCellDef="let element"> {{element.permissionTitles.join(', ')}} </td>
       </ng-container>
 
@@ -81,11 +81,11 @@ export class RoleIndexPageComponent {
       .pipe(
         map((roles) => {
           return roles.map((role) => {
-            role['permissionTitles'] = role.permissions.map((p) => p.title);
+            role['permissionTitles'] = role['permissions'].map((p) => p.title);
 
             return role;
           });
         })
-      )
+      );
   }
 }

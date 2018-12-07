@@ -15,19 +15,18 @@ export interface LoginHttpAnswer {
 }
 
 export interface IUser {
-  id?: string;
+  _id?: string;
   name: string;
   description: string;
   roles: IRole[];
 }
 
 export interface IRole {
-  id?: string;
+  _id?: string;
   name: string;
   title: string;
   description: string;
-  permissionIds: string[];
-  permissions?: IPermission[];
+  permissionIds?: string[];
 }
 
 export interface IPermission {
@@ -112,7 +111,11 @@ export class AppService {
   }
 
   public updateUserItemHttp(user: IUser): Observable<IUser> {
-    return of(null);
+    return this.httpClient.post<any>('/server/admin/user/save', { user });
+  }
+
+  public createUserItemHttp(user: IUser): Observable<IUser> {
+    return this.httpClient.post<any>('/server/admin/user/create', { user });
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
@@ -137,7 +140,11 @@ export class AppService {
   }
 
   public updateRoleItemHttp(role: IRole): Observable<IRole> {
-    return of(null);
+    return this.httpClient.post<any>('/server/admin/role/save', { role });
+  }
+
+  public createRoleItemHttp(role: IRole): Observable<IRole> {
+    return this.httpClient.post<any>('/server/admin/role/create', { role });
   }
 
   public getPermissionIndexHttp(): Observable<IPermission[]> {

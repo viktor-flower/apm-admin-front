@@ -15,8 +15,8 @@ describe('workspace-project App', () => {
       await page.openSideNav();
       await page.clickOn('.anonymous-menu .login-menu-item');
       await page.wait('lookAt');
-      await page.sendKeys('input[placeholder=Login]', 'admin');
-      await page.sendKeys('input[placeholder=Password]', 'passwd');
+      await page.sendKeys('input[placeholder=Name]', 'administer');
+      await page.sendKeys('input[placeholder=Password]', 'administer');
       await page.wait('lookAt');
       await page.clickOn('.submit');
   });
@@ -31,7 +31,8 @@ describe('workspace-project App', () => {
       await page.wait('lookAt');
       await page.clickOn('.local-menu');
       await page.clickOn('.new-menu-item');
-      await page.sendKeys('input[placeholder=Name]', 'New permission');
+      await page.sendKeys('input[placeholder=Name]', 'new_permission' + Date.now().valueOf());
+      await page.sendKeys('input[placeholder=Title]', 'New permission'  + Date.now().valueOf());
       await page.sendKeys('input[placeholder=Description]', 'Description');
       await page.wait('lookAt');
       await page.clickOn('.submit');
@@ -42,7 +43,9 @@ describe('workspace-project App', () => {
       await page.clickOn('tr:nth-child(5) .group-menu-item');
       await page.clickOn('.cdk-overlay-container .edit-menu-item');
       await page.clear('input[placeholder=Name]');
-      await page.sendKeys('input[placeholder=Name]', 'Edited permission');
+      await page.sendKeys('input[placeholder=Name]', 'Edited permission' + Date.now().valueOf());
+      await page.clear('input[placeholder=Title]');
+      await page.sendKeys('input[placeholder=Title]', 'Edited permission title' + Date.now().valueOf());
       await page.clear('input[placeholder=Description]');
       await page.sendKeys('input[placeholder=Description]', 'Edited description');
       await page.wait('lookAt');
@@ -61,7 +64,8 @@ describe('workspace-project App', () => {
       await page.clickOn('.local-menu');
       await page.clickOn('.new-menu-item');
       await page.wait('lookAt');
-      await page.sendKeys('input[placeholder=Name]', 'New role');
+      await page.sendKeys('input[placeholder=Name]', 'new_role_' + Date.now().valueOf());
+      await page.sendKeys('input[placeholder=Title]', 'New role ' + Date.now().valueOf());
       await page.sendKeys('input[placeholder=Description]', 'Role description');
       await page.clickOn('.permission-group formly-field:nth-child(5) mat-checkbox');
       await page.clickOn('.permission-group formly-field:nth-child(3) mat-checkbox');
@@ -75,8 +79,8 @@ describe('workspace-project App', () => {
       await page.clickOn('tr:nth-child(5) .group-menu-item');
       await page.clickOn('.cdk-overlay-container .edit-menu-item');
       await page.wait('lookAt');
-      await page.clear('input[placeholder=Name]');
-      await page.sendKeys('input[placeholder=Name]', 'Edited role');
+      await page.clear('input[placeholder=Title]');
+      await page.sendKeys('input[placeholder=Title]', 'Edited role title ' + Date.now().valueOf());
       await page.clear('input[placeholder=Description]');
       await page.sendKeys('input[placeholder=Description]', 'Edited role description');
       await page.clickOn('.permission-group formly-field:nth-child(4) mat-checkbox');
@@ -98,7 +102,6 @@ describe('workspace-project App', () => {
       await page.clickOn('.local-menu');
       await page.clickOn('.new-menu-item');
       await page.wait('lookAt');
-      await page.sendKeys('input[placeholder=Email]', 'new-user@example.com');
       await page.sendKeys('input[placeholder=Name]', 'New User');
       await page.clickOn('.role-group formly-field:nth-child(5) mat-checkbox');
       await page.clickOn('.role-group formly-field:nth-child(3) mat-checkbox');

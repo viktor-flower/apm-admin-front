@@ -48,20 +48,21 @@ export class FakeAppService extends AppService {
   }
 
   public t_generateRoles(permissions: IPermission[]): IRole[] {
-    return [
-      'BaseChord Support',
-      'BaseChord Manager',
-      'Aaron`s Store Manager',
-      'Aaron`s IT',
-      'Aaron`s Auditing Dept.'
-    ].map((name) => {
-      return {
-        id: faker.random.uuid(),
-        name,
-        description: faker.lorem.lines(3),
-        permissionIds: _.map(permissions, 'id').filter((e) => faker.random.boolean())
-      } as IRole;
-    });
+    return [];
+    // return [
+    //   'BaseChord Support',
+    //   'BaseChord Manager',
+    //   'Aaron`s Store Manager',
+    //   'Aaron`s IT',
+    //   'Aaron`s Auditing Dept.'
+    // ].map((name) => {
+    //   return {
+    //     id: faker.random.uuid(),
+    //     name,
+    //     description: faker.lorem.lines(3),
+    //     permissionIds: _.map(permissions, 'id').filter((e) => faker.random.boolean())
+    //   } as IRole;
+    // });
   }
 
   public t_generatePermissions() {
@@ -130,14 +131,15 @@ export class FakeAppService extends AppService {
   }
 
   public getUserItemHttp(id: string): Observable<IUser> {
-    let user = _.find(this.t_storage.users, (u) => {
-      return u.id === id;
-    });
-    if (!user) {
-      user = this.t_storage.users[0];
-    }
-
-    return of(_.clone(user));
+    return of(null)
+    // let user = _.find(this.t_storage.users, (u) => {
+    //   return u.id === id;
+    // });
+    // if (!user) {
+    //   user = this.t_storage.users[0];
+    // }
+    //
+    // return of(_.clone(user));
   }
 
   public getUserIndexHttp(): Observable<IUser[]> {
@@ -186,50 +188,53 @@ export class FakeAppService extends AppService {
   }
 
   public getRoleItemHttp(id: string): Observable<IRole> {
-    let role = _.find(this.t_storage.roles, (r) => {
-      return r.id === id;
-    });
-    if (!role) {
-      role = this.t_storage.roles[0];
-    }
-
-    return of(_.clone(role));
+    return of(null)
+    // let role = _.find(this.t_storage.roles, (r) => {
+    //   return r.id === id;
+    // });
+    // if (!role) {
+    //   role = this.t_storage.roles[0];
+    // }
+    //
+    // return of(_.clone(role));
   }
 
   public updateUserItemHttp(user: IUser): Observable<IUser> {
-    if (user && !user.id) {
-      user.id = faker.random.uuid();
-      this.t_storage.users.push(user);
-
-      return of(user);
-    }
-
-    const index = _.findIndex(this.t_storage.users, (u) => {
-      return u.id === user.id;
-    });
-    if (index !== -1) {
-      this.t_storage.users.splice(index, 1 , user);
-    }
-
-    return of(user);
+    return of(null)
+    // if (user && !user.id) {
+    //   user.id = faker.random.uuid();
+    //   this.t_storage.users.push(user);
+    //
+    //   return of(user);
+    // }
+    //
+    // const index = _.findIndex(this.t_storage.users, (u) => {
+    //   return u.id === user.id;
+    // });
+    // if (index !== -1) {
+    //   this.t_storage.users.splice(index, 1 , user);
+    // }
+    //
+    // return of(user);
   }
 
   public updateRoleItemHttp(role: IRole): Observable<IRole> {
-    if (role && !role.id) {
-      role.id = faker.random.uuid();
-      this.t_storage.roles.push(role);
-
-      return of(role);
-    }
-
-    const index = _.findIndex(this.t_storage.roles, (i) => {
-      return i.id === role.id;
-    });
-    if (index !== -1) {
-      this.t_storage.roles.splice(index, 1 , role);
-    }
-
-    return of(role);
+    return of(null)
+    // if (role && !role.id) {
+    //   role.id = faker.random.uuid();
+    //   this.t_storage.roles.push(role);
+    //
+    //   return of(role);
+    // }
+    //
+    // const index = _.findIndex(this.t_storage.roles, (i) => {
+    //   return i.id === role.id;
+    // });
+    // if (index !== -1) {
+    //   this.t_storage.roles.splice(index, 1 , role);
+    // }
+    //
+    // return of(role);
   }
 
 

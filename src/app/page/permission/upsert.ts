@@ -102,18 +102,17 @@ export class PermissionUpsertPageComponent implements OnInit, OnDestroy {
     };
 
     if (this._id === 'new') {
-      console.log(updatedPermission);
       this.appService.createPermissionItemHttp(updatedPermission)
         .subscribe(() => {
-          this.uiService.showMessage('The permission has been created successfully.');
           this.router.navigate(['/permission', 'index']);
+          this.uiService.showMessage('The permission has been created successfully.');
           done();
         });
     } else {
       this.appService.updatePermissionItemHttp(updatedPermission)
         .subscribe(() => {
-          this.uiService.showMessage('The permission has been updated successfully.');
           this.router.navigate(['/permission', 'index']);
+          this.uiService.showMessage('The permission has been updated successfully.');
           done();
         });
     }
