@@ -72,7 +72,7 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
         type: 'description',
         label: 'Description',
         placeholder: 'Description',
-        required: true,
+        required: false,
       }
     },
   ];
@@ -92,7 +92,7 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
         .toPairs()
         .filter(a => !!a[1])
         .map(a => a[0])
-        .value()
+        .value() as string[]
     };
 
     if (this._id === 'new') {
@@ -157,7 +157,7 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
           wrappers: ['form-field'],
           templateOptions: { label: 'Roles' },
           fieldGroup: roleFields,
-          fieldGroupClassName: 'permission-group'
+          fieldGroupClassName: 'role-group'
         };
         this.fields.push(roleGroup);
 

@@ -102,7 +102,7 @@ describe('workspace-project App', () => {
       await page.clickOn('.local-menu');
       await page.clickOn('.new-menu-item');
       await page.wait('lookAt');
-      await page.sendKeys('input[placeholder=Name]', 'New User');
+      await page.sendKeys('input[placeholder=Name]', 'New User' + Date.now().valueOf());
       await page.clickOn('.role-group formly-field:nth-child(5) mat-checkbox');
       await page.clickOn('.role-group formly-field:nth-child(3) mat-checkbox');
       await page.clickOn('.role-group formly-field:nth-child(2) mat-checkbox');
@@ -115,10 +115,8 @@ describe('workspace-project App', () => {
       await page.clickOn('tr:nth-child(5) .group-menu-item');
       await page.clickOn('.cdk-overlay-container .edit-menu-item');
       await page.wait('lookAt');
-      await page.clear('input[placeholder=Email]');
-      await page.sendKeys('input[placeholder=Email]', 'edited-email@example.com');
       await page.clear('input[placeholder=Name]');
-      await page.sendKeys('input[placeholder=Name]', 'Edited Name');
+      await page.sendKeys('input[placeholder=Name]', 'Edited Name' + Date.now().valueOf());
       await page.clickOn('.role-group formly-field:nth-child(4) mat-checkbox');
       await page.clickOn('.role-group formly-field:nth-child(2) mat-checkbox');
       await page.clickOn('.role-group formly-field:nth-child(3) mat-checkbox');

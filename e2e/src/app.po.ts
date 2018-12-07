@@ -6,7 +6,7 @@ export class AppPage {
     'toaster-success': '.toast-success',
   };
 
-  sleepOption = 'default';
+  sleepOption = 'fast';
 
   sleepParameters = {
     default: {
