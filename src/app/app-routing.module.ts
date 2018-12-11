@@ -11,6 +11,7 @@ import {PermissionIndexPageComponent} from './page/permission';
 import {RoleIndexPageComponent} from './page/role';
 import {RoleUpsertPageComponent} from './page/role/upsert';
 import {PermissionUpsertPageComponent} from './page/permission/upsert';
+import {UserSetPasswordPageComponent} from './page/user/set-password';
 
 
 const routes: Routes = [
@@ -57,6 +58,11 @@ const routes: Routes = [
   {
     path: 'user/upsert/:_id',
     component: UserUpsertPageComponent,
+    canActivate: [IsAuthenticatedGuard]
+  },
+  {
+    path: 'user/set-password/:_id',
+    component: UserSetPasswordPageComponent,
     canActivate: [IsAuthenticatedGuard]
   },
   {

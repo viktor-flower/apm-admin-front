@@ -37,6 +37,7 @@ import {PermissionIndexPageComponent} from './page/permission';
 import {RoleIndexPageComponent} from './page/role';
 import {RoleUpsertPageComponent} from './page/role/upsert';
 import {PermissionUpsertPageComponent} from './page/permission/upsert';
+import {UserSetPasswordPageComponent} from './page/user/set-password';
 
 export const matLibraries = [
   MatButtonModule,
@@ -76,6 +77,7 @@ export const allComponents = [
   StubComponentPageComponent,
   UserIndexPageComponent,
   UserUpsertPageComponent,
+  UserSetPasswordPageComponent,
   PermissionIndexPageComponent,
   PermissionUpsertPageComponent,
   RoleIndexPageComponent,

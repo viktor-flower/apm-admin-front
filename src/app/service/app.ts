@@ -119,6 +119,13 @@ export class AppService {
     return this.httpClient.post<any>('/server/admin/user/create', { user });
   }
 
+  public setPasswordHttp(_id: string, password: string): Observable<boolean> {
+    return this.httpClient.post<any>('/server/admin/user/set-password', { _id, password })
+      .pipe(
+        map(({success}) => success)
+      );
+  }
+
   public getUserIndexHttp(): Observable<IUser[]> {
     return this.httpClient.get<any>(`/server/admin/user/list`)
       .pipe(

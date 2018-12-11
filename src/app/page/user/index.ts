@@ -35,6 +35,10 @@ export interface IDUser extends IUser {
               mat-menu-item
               class="edit-menu-item"
               [routerLink]="['/user', 'upsert', element._id]">Edit</button>
+            <button
+              mat-menu-item
+              class="set-password-menu-item"
+              [routerLink]="['/user', 'set-password', element._id]">Set password</button>
           </mat-menu>
 
           <button

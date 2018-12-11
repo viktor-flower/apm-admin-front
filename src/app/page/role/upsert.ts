@@ -135,6 +135,7 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
             if (this._id === 'new') {
               return of({
                 name: '',
+                title: '',
                 description: '',
                 permissionIds: [],
                 permissions: []
