@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {AppService} from '../../service/app';
+import {AppService, EAdminPermission} from '../../service/app';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {MatSidenav} from '@angular/material';
@@ -14,11 +14,16 @@ export class AppComponent {
   sidenav: MatSidenav;
   title = 'Application Policy Manager';
   isAuthenticated$ = this.appService.isAuthenticated$;
+  EAdminPermission = EAdminPermission;
 
   constructor(
     private appService: AppService,
     private router: Router
   ) { }
+
+  hasPermission$(name: string): Observable<boolean> {
+    return this.appService.hasPermission$(name);
+  }
 
   navigate(route) {
     this.router.navigate(route);

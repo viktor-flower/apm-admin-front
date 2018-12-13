@@ -2,18 +2,18 @@
   <mat-sidenav #sidenav mode="push">
     <ng-container *ngIf="isAuthenticated$ | async">
       <mat-list class="authenticated-menu">
-        <mat-list-item>
+        <mat-list-item *ngIf="hasPermission$(EAdminPermission.MANAGE_USERS) | async">
           <button mat-button (click)="navigate(['/user', 'index'])" class="users-menu-item">Users</button>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item *ngIf="hasPermission$(EAdminPermission.MANAGE_ROLES) | async">
           <button mat-button (click)="navigate(['/role', 'index'])" class="roles-menu-item">Roles</button>
         </mat-list-item>
-        <mat-list-item>
+        <mat-list-item *ngIf="hasPermission$(EAdminPermission.MANAGE_PERMISSIONS) | async">
           <button mat-button (click)="navigate(['/permission', 'index'])" class="permissions-menu-item">Permissions</button>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <button mat-button (click)="navigate([''])">Profile</button>
+          <button mat-button (click)="navigate(['/user', 'profile'])">Profile</button>
         </mat-list-item>
         <mat-list-item>
           <button mat-button (click)="logout()" class="logout-menu-item">Logout</button>

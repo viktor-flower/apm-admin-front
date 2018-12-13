@@ -1,20 +1,16 @@
 import {Store, StoreConfig} from '@datorama/akita';
 import {Injectable} from '@angular/core';
-
-export interface UserDetails {
-  id?: string;
-  email: string;
-}
+import {IUser} from '../../service/app';
 
 export interface SessionState {
   token: string;
-  userDetails: UserDetails;
+  user: IUser;
 }
 
 export function createInitialState(): SessionState {
   return {
     token: '',
-    userDetails: null
+    user: null
   };
 }
 

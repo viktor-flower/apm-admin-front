@@ -1,17 +1,18 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {map, tap} from 'rxjs/operators';
-import {SessionStore, UserDetails} from '../state/session/store';
+import {first, map, tap} from 'rxjs/operators';
+import {SessionState, SessionStore} from '../state/session/store';
 import {SessionQuery} from '../state/session/query';
 import {createSession, ISession} from '../state/session/model';
-import {PartialDeep} from 'lodash';
+import {CoreService} from './core';
+import {flatMap} from 'rxjs/internal/operators';
 
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
 export interface LoginHttpAnswer {
   token: string;
-  userDetails: UserDetails;
+  user: IUser;
 }
 
 export interface IUser {
@@ -27,6 +28,7 @@ export interface IRole {
   name: string;
   title: string;
   description: string;
+  permissions?: IPermission[];
   permissionIds?: string[];
 }
 
@@ -37,64 +39,143 @@ export interface IPermission {
   description?: string;
 }
 
+export enum ESystemRole {
+  ANONYMOUSE = 'SYSTEM:ANONYMOUSE',
+  AUTHENTICATED = 'SYSTEM:AUTHENTICATED',
+  ADMINISTER = 'SYSTEM:ADMINISTER'
+}
+
+export enum EAdminPermission {
+  LOGIN = 'ADMIN:LOGIN',
+  ADMIN_SERVICE_ACCESS = 'ADMIN:ADMIN_SERVICE_ACCESS',
+  MANAGE_PERMISSIONS = 'ADMIN:MANAGE_PERMISSIONS',
+  MANAGE_ROLES = 'ADMIN:MANAGE_ROLES',
+  MANAGE_USERS = 'ADMIN:MANAGE_USERS',
+  FETCH_OWN_ACL = 'SERVICE:FETCH_OWN_ACL',
+  FETCH_ANY_ACL = 'SERVICE:FETCH_ANY_ACL'
+}
+
 @Injectable()
 export class AppService {
   isAuthenticated$ = this.sessionQuery.isLoggedIn$;
-  private token: string = null;
+  private permissionNames: string[] = [];
+  private permissionNamesS = new BehaviorSubject<string[]>([]);
+  private permissionNames$ = this.permissionNamesS.asObservable();
+  private roleNamesS = new BehaviorSubject<string[]>([]);
+  private roleNames$ = this.roleNamesS.asObservable();
+  private roleNames: string[] = [];
+  public session$ = this.sessionQuery.select();
 
   constructor(
+    private coreService: CoreService,
     private httpClient: HttpClient,
     private sessionQuery: SessionQuery,
     private sessionStore: SessionStore
   ) {
-    const token = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY));
-    if (!!token) {
-      this.setToken(token);
+    const token = this.coreService.readToken();
+    if (token) {
+      this.retrieveSesion(token)
+        .subscribe((session: ISession) => {
+          this.sessionStore.update(session);
+        });
     }
+    this.sessionQuery.select()
+      .subscribe((session: SessionState) => {
+        const roleNames = [];
+        const permissionNames = [];
+
+        if (session.user) {
+          session.user.roles.forEach((role) => {
+            roleNames.push(role.name);
+            role.permissions.forEach((permission) => {
+              permissionNames.push(permission.name);
+            });
+          });
+        }
+        this.permissionNamesS.next(permissionNames);
+        this.roleNamesS.next(roleNames);
+      });
+
+    this.permissionNames$.subscribe((permissionNames) => this.permissionNames = permissionNames);
+    this.roleNames$.subscribe((roleNames) => this.roleNames = roleNames);
   }
 
-  isLoggedIn() {
-    return !!this.sessionQuery.getSnapshot().token;
-  }
+  public retrieveSesion(token: string): Observable<ISession> {
+    return this.getOwnAclHttp()
+      .pipe(
+        map((user: IUser) => {
+          const sessionDict: ISession = {
+            token,
+            user
+          };
+          const session = createSession(sessionDict);
 
-  public setToken(token) {
-    this.token = token;
-    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(token));
-    const session: ISession = {
-      token
-    };
-    this.sessionStore.update(createSession(session));
-  }
-
-  public getToken() {
-    return this.sessionQuery.getSnapshot().token;
+          return session;
+        })
+      );
   }
 
   public isAuthenticated(): boolean {
-    return !!this.getToken();
+    return !!this.sessionQuery.getSnapshot().token;
+  }
+
+  public hasRole(name: string) {
+    return this.roleNames.indexOf(name) > 0;
+  }
+
+  public hasRole$(name: string): Observable<boolean> {
+    return this.roleNames$.pipe(
+      map((roleNames) => {
+        return roleNames.indexOf(name) > 0;
+      })
+    );
+  }
+
+  public hasPermission(name: string) {
+    return this.permissionNames.indexOf(name) > 0;
+  }
+
+  public hasPermission$(name: string): Observable<boolean> {
+    return this.permissionNames$.pipe(
+      map((permissionNames) => {
+        return permissionNames.indexOf(name) > 0;
+      })
+    );
   }
 
   public login(name: string, password: string): Observable<boolean> {
     return this.loginHttp(name, password)
       .pipe(
-        tap<LoginHttpAnswer>(({token}) => {
-          if (!!token) {
-            this.setToken(token);
+        flatMap<LoginHttpAnswer, boolean>(({token}, index: number): Observable<boolean> => {
+          if (!token) {
+            return of(false);
           }
-        }),
-        map(({token}) => this.isAuthenticated())
-      );
+          this.coreService.writeToken(token);
 
-    return of(true);
+          return this.retrieveSesion(token)
+            .pipe(
+              tap((session: ISession) => {
+                this.sessionStore.update(session);
+              }),
+              map((session: ISession) => !!session.token)
+            );
+        }),
+        first()
+      );
   }
 
   public logout() {
-    this.setToken(null);
+    this.coreService.writeToken(null);
+    const sessionDict: ISession = {
+      token: null,
+      user: null
+    };
+    const session = createSession(sessionDict);
+    this.sessionStore.update(session);
   }
 
   public clearAll() {
-    this.setToken(null);
-    localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
+    this.coreService.writeToken(null);
   }
 
   protected loginHttp(name: string, password: string): Observable<LoginHttpAnswer> {
@@ -109,6 +190,10 @@ export class AppService {
       .pipe(
         map(({user}) => user)
       );
+  }
+
+  public getOwnAclHttp(): Observable<IUser> {
+    return this.httpClient.get<any>(`/server/service/own-acl`);
   }
 
   public updateUserItemHttp(user: IUser): Observable<IUser> {

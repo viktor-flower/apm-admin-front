@@ -7,12 +7,7 @@ import {SessionState, SessionStore} from './store';
   providedIn: 'root'
 })
 export class SessionQuery extends Query<SessionState> {
-  isLoggedIn$ = this.select(session => session.token)
-    .pipe(
-      distinctUntilChanged(),
-      map(token => !!token),
-      share()
-    );
+  isLoggedIn$ = this.select(session => !!session.token);
 
   constructor(protected store: SessionStore) {
     super(store);

@@ -12,6 +12,8 @@ import {RoleIndexPageComponent} from './page/role';
 import {RoleUpsertPageComponent} from './page/role/upsert';
 import {PermissionUpsertPageComponent} from './page/permission/upsert';
 import {UserSetPasswordPageComponent} from './page/user/set-password';
+import {UserProfilePageComponent} from './page/user/profile';
+import {EAdminPermission} from './service/app';
 
 
 const routes: Routes = [
@@ -28,41 +30,54 @@ const routes: Routes = [
   {
     path: 'permission/index',
     component: PermissionIndexPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_PERMISSIONS }
   },
   {
     path: 'permission/upsert/:_id',
     component: PermissionUpsertPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_PERMISSIONS }
   },
   {
     path: 'role/index',
     component: RoleIndexPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_ROLES }
   },
   {
     path: 'role/upsert/:_id',
     component: RoleUpsertPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_ROLES }
   },
   {
     path: 'user/index',
     component: UserIndexPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_USERS }
   },
   {
     path: 'user/upsert',
     component: UserUpsertPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_USERS }
   },
   {
     path: 'user/upsert/:_id',
     component: UserUpsertPageComponent,
-    canActivate: [IsAuthenticatedGuard]
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_USERS }
   },
   {
     path: 'user/set-password/:_id',
     component: UserSetPasswordPageComponent,
+    canActivate: [IsAuthenticatedGuard],
+    data: { permission: EAdminPermission.MANAGE_USERS }
+  },
+  {
+    path: 'user/profile',
+    component: UserProfilePageComponent,
     canActivate: [IsAuthenticatedGuard]
   },
   {

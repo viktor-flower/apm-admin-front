@@ -24,7 +24,7 @@ import {AppService} from './service/app';
 import {FakeAppService} from './service/fake-app';
 import {FormlyMaterialModule} from '@ngx-formly/material';
 import {FormlyModule} from '@ngx-formly/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {UiService} from './service/ui';
 import {ReactiveFormsModule} from '@angular/forms';
 import {IsAnonymousGuard} from './guard/is-anonymous';
@@ -38,6 +38,8 @@ import {RoleIndexPageComponent} from './page/role';
 import {RoleUpsertPageComponent} from './page/role/upsert';
 import {PermissionUpsertPageComponent} from './page/permission/upsert';
 import {UserSetPasswordPageComponent} from './page/user/set-password';
+import {AuthenticationInterceptor} from './interceptor/authentication';
+import {UserProfilePageComponent} from './page/user/profile';
 
 export const matLibraries = [
   MatButtonModule,
@@ -78,6 +80,7 @@ export const allComponents = [
   UserIndexPageComponent,
   UserUpsertPageComponent,
   UserSetPasswordPageComponent,
+  UserProfilePageComponent,
   PermissionIndexPageComponent,
   PermissionUpsertPageComponent,
   RoleIndexPageComponent,
@@ -87,7 +90,12 @@ export const allComponents = [
 export const allProviders: any[] = [
   UiService,
   IsAnonymousGuard,
-  IsAuthenticatedGuard
+  IsAuthenticatedGuard,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthenticationInterceptor,
+    multi: true
+  }
 ];
 
 // Injects a fake service to be able to work without backend for presentation purpose.
