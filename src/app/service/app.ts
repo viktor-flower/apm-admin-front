@@ -138,7 +138,7 @@ export class AppService {
   public hasPermission$(name: string): Observable<boolean> {
     return this.permissionNames$.pipe(
       map((permissionNames) => {
-        return permissionNames.indexOf(name) > 0;
+        return permissionNames.indexOf(name) >= 0;
       })
     );
   }
