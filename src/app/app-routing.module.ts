@@ -82,8 +82,14 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: StubComponentPageComponent
+    redirectTo: '/login',
+    pathMatch: 'full'
   }
+  //  @todo resolve later.
+  // {
+  //   path: '**',
+  //   component: StubComponentPageComponent
+  // }
 ];
 
 @NgModule({

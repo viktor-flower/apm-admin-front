@@ -18,7 +18,7 @@ export interface LoginHttpAnswer {
 export interface IUser {
   _id?: string;
   name: string;
-  description: string;
+  description?: string;
   roles?: IRole[];
   roleIds?: string[];
 }
@@ -27,7 +27,7 @@ export interface IRole {
   _id?: string;
   name: string;
   title: string;
-  description: string;
+  description?: string;
   permissions?: IPermission[];
   permissionIds?: string[];
 }
@@ -44,6 +44,9 @@ export enum ESystemRole {
   AUTHENTICATED = 'SYSTEM:AUTHENTICATED',
   ADMINISTER = 'SYSTEM:ADMINISTER'
 }
+
+export const ANONYMOUSE_ROLE = ESystemRole.ANONYMOUSE
+export const AUTHENTOCATED_ROLE = ESystemRole.AUTHENTICATED
 
 export enum EAdminPermission {
   LOGIN = 'ADMIN:LOGIN',

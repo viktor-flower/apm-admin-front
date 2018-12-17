@@ -105,7 +105,7 @@ export class RoleUpsertPageComponent implements OnInit, OnDestroy {
         .toPairs()
         .filter(a => !!a[1])
         .map(a => a[0])
-        .value()
+        .value() as string[]
     };
 
     if (this._id === 'new') {

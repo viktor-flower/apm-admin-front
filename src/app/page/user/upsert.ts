@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {FormlyFieldConfig} from '@ngx-formly/core';
 import {forkJoin, of, Subscription} from 'rxjs';
-import {AppService, IRole, IUser} from '../../service/app';
+import {ANONYMOUSE_ROLE, AppService, AUTHENTOCATED_ROLE, ESystemRole, IRole, IUser} from '../../service/app';
 import {ActivatedRoute, Router} from '@angular/router';
-import {flatMap, take} from 'rxjs/operators';
+import {flatMap, map, take} from 'rxjs/operators';
 import * as _ from 'lodash';
 import {UiService} from '../../service/ui';
 
@@ -136,7 +136,12 @@ export class UserUpsertPageComponent implements OnInit, OnDestroy {
           }),
           take(1)
         ),
-      this.appService.getRoleIndexHttp().pipe(take(1))
+      this.appService.getRoleIndexHttp().pipe(
+        map((roles) => {
+          return roles.filter(role =>  ![ANONYMOUSE_ROLE, AUTHENTOCATED_ROLE].find((r) => r === role.name))
+        }),
+        take(1)
+      )
     )
       .subscribe(([user, roles]) => {
         this.initialUser = user;
